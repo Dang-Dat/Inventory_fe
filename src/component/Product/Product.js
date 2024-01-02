@@ -100,13 +100,10 @@ const Product = (props) => {
 
                             </div>
                             <div className="actions">
-                                <button className="btn btn-success refresh" onClick={() => hanldeRefresh()}>
-
-                                    <i class="fa-regular fa-arrows-rotate"></i> Refresh</button>
                                 <button className="btn btn-primary"
                                     onClick={() => { setIsShowModalProduct(true); setActionModalProduct("CREATE") }}
                                 >
-                                    <i className='fa fa-plus-circle'></i> Add new</button>
+                                    <i className='fa fa-plus-circle'></i>Thêm mới</button>
                                 <form
                                     className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search search-for  ">
                                     <div className="input-group" style={{ marginLeft: "900px" }}>
@@ -131,12 +128,12 @@ const Product = (props) => {
                                 <thead>
                                     <tr>
                                         {/* <th scope="col">#</th> */}
-                                        <th scope="col">id</th>
+                                        <th style={{ width: '4%' }} scope="col">id</th>
                                         <th scope="col">Tên thuốc</th>
                                         <th scope="col">Số lượng</th>
                                         <th scope="col">Loại Thuốc</th>
                                         <th scope="col">Mô tả</th>
-                                        <th >Actions</th>
+                                        <th style={{ width: '16%' }}>Actions</th>
 
                                     </tr>
                                 </thead>
@@ -156,10 +153,10 @@ const Product = (props) => {
                                                         <td>
                                                             <button className="btn btn-warning mx-3"
                                                                 onClick={() => hanldeUpdateProduct(item)}
-                                                            ><i className="fa fa-pencil-square-o"></i>Edit</button>
+                                                            ><i className="fa-regular fa-pen-to-square"></i></button>
                                                             <button className="btn btn-danger"
                                                                 onClick={() => hanldeDeleteProduct(item)}
-                                                            ><i className="fa fa-trash" ></i>Delete</button>
+                                                            ><i className="fa fa-trash" ></i></button>
                                                         </td>
                                                     </tr>
                                                 )

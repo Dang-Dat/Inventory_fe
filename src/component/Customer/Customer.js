@@ -1,16 +1,17 @@
 
 import { useEffect, useState } from "react";
-import { getListCustomers } from "../../service/dataService";
+import { getListCustomers, deleteCustomer } from "../../service/dataService";
 import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';
 import ModalCustomer from './ModalCustomer'
+import ModalDeleteCustomer from './ModalDeleteCustomer'
 import { useLocation } from 'react-router-dom';
 import _ from "lodash";
 const Customer = (props) => {
     const location = useLocation();
     const [listCustomers, setListCustomers] = useState([]);
     const [pageNumber, setPageNumber] = useState(1);
-    const [pageSize, setPageSize] = useState(1); // so phan tu trong 1 page
+    const [pageSize, setPageSize] = useState(8); // so phan tu trong 1 page
     const [totalPages, setTotalPages] = useState(0);
     const [keyWord, setKeyWord] = useState("");
     //modal delete
@@ -42,8 +43,8 @@ const Customer = (props) => {
         await setPageNumber(+event.selected + 1);
         // await fetchCustomers(+event.selected + 1);
     };
-    const hanldeDeleteUser = (user) => {
-        setDataModalDelete(user);
+    const hanldeDeleteCustomer = (customer) => {
+        setDataModalDelete(customer);
         setIsShowModalDelete(true);
     }
     const handleClose = () => {
@@ -55,21 +56,20 @@ const Customer = (props) => {
         setDataModalUpdate({});
         await fetchCustomers();
     }
-    // const confirmDeleteUser = async (user) => {
-    //     let response = await deleteUser(dataModalDelete);
-    //     console.log('check respon: ', response)
-    //     if (response && response.data.EC === 0) {
-    //         toast.success(response.data.EM)
-    //         await fetchCustomers();
-    //     } else {
-    //         toast.error(response.data.EM)
-    //     }
-    //     setIsShowModalDelete(false);
-    // }
-    const hanldeUpdateUser = (user) => {
+    const confirmDeleteCustomer = async () => {
+        let response = await deleteCustomer(dataModalDelete);
+        if (response && response.data) {
+            toast.success("Xoa thanh cong")
+            await fetchCustomers();
+        } else {
+            toast.error("Loi trong khi xoa")
+        }
+        setIsShowModalDelete(false);
+    }
+    const hanldeUpdateCustomer = (customer) => {
         setActionModalCustomer('UPDATE')
         setIsShowModalCustomer(true);
-        setDataModalUpdate(user);
+        setDataModalUpdate(customer);
     }
     const hanldeRefresh = async () => {
         await fetchCustomers();
@@ -92,12 +92,10 @@ const Customer = (props) => {
                                 <h3>Khach hang</h3>
                             </div>
                             <div className="actions">
-                                <button className="btn btn-success refresh"
-                                    onClick={() => hanldeRefresh()}
-                                ><i className='fa fa-refresh '></i> refresh</button>
+
                                 <button className="btn btn-primary"
                                     onClick={() => { setIsShowModalCustomer(true); setActionModalCustomer("CREATE") }}
-                                ><i className='fa fa-plus-circle'></i> Add new</button>
+                                ><i className='fa fa-plus-circle'></i> Thêm mới</button>
                                 <form
                                     className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search search-for  ">
                                     <div className="input-group" style={{ marginLeft: "900px" }}>
@@ -127,7 +125,7 @@ const Customer = (props) => {
                                         <th scope="col">Email</th>
                                         <th scope="col">Adress</th>
                                         <th scope="col">Note</th>
-                                        <th >Actions</th>
+                                        <th style={{ width: '16%' }}>Actions</th>
 
                                     </tr>
                                 </thead>
@@ -146,10 +144,10 @@ const Customer = (props) => {
                                                         <td>{item.note}</td>
                                                         <td>
                                                             <button className="btn btn-warning mx-3"
-                                                                onClick={() => hanldeUpdateUser(item)}
-                                                            ><i className="fa fa-pencil-square-o"></i></button>
+                                                                onClick={() => hanldeUpdateCustomer(item)}
+                                                            ><i className="fa-regular fa-pen-to-square"></i></button>
                                                             <button className="btn btn-danger"
-                                                                onClick={() => hanldeDeleteUser(item)}
+                                                                onClick={() => hanldeDeleteCustomer(item)}
                                                             ><i className="fa fa-trash" ></i></button>
                                                         </td>
 
@@ -192,12 +190,12 @@ const Customer = (props) => {
                         }
                     </div>
                 </div>
-                {/* <ModalDelete
+                <ModalDeleteCustomer
                     show={isShowModalDelete}
                     handleClose={handleClose}
-                    confirmDeleteUser={confirmDeleteUser}
+                    confirmDeleteCustomer={confirmDeleteCustomer}
                     dataModal={dataModalDelete}
-                />*/}
+                />
                 <ModalCustomer
                     handleClose={handleClose}
                     show={isShowModalCustomer}

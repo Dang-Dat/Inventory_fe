@@ -38,7 +38,7 @@ const ModalCustomer = (props) => {
     }, [])
     useEffect(() => {
         if (action === 'UPDATE') {
-
+            console.log("update", dataModalUpdate)
             setCustomerData({ ...dataModalUpdate });
         }
     }, [dataModalUpdate])
@@ -108,7 +108,7 @@ const ModalCustomer = (props) => {
         if (check === true) {
             let response = action === 'CREATE' ?
                 await createNewCustomer({ ...customerData }) : await updateCustomer({ ...customerData });
-
+            //await updateCustomer({ ...customerData });
             if (response.data) {
                 props.onHide();
                 setCustomerData({ ...defaultCustomerData });
@@ -152,7 +152,7 @@ const ModalCustomer = (props) => {
                         </div>
                         <div className='col-12 col-sm-6 form-group' >
                             <label>Phone number (<span className='red'>*</span>) :</label>
-                            <input disabled={action === 'CREATE' ? false : true}
+                            <input
                                 className={validInputs.phone ? 'form-control' : 'form-control is-invalid'} type="text" value={customerData.phone}
                                 onChange={(event) => handleOnchangeInput(event.target.value, "phone")}
                             />

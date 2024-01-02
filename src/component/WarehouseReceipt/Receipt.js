@@ -70,10 +70,6 @@ const Receipt = (props) => {
         setIsShowModalReceipt(true);
         setDataModalUpdate(response.data.data);
     }
-
-    const hanldeRefresh = async () => {
-        await fetchReceipt();
-    }
     const handlePageClick = async (event) => {
         await setpageNumber(+event.selected + 1);
     };
@@ -96,13 +92,11 @@ const Receipt = (props) => {
                                 <h3>Nhập kho</h3>
                             </div>
                             <div className="actions">
-                                <button className="btn btn-success refresh"
-
-                                >refresh</button>
+                                
                                 <button className="btn btn-primary"
                                     onClick={() => { setIsShowModalReceipt(true); setActionModalReceipt("CREATE") }}
                                 >
-                                    <i className='fa fa-plus-circle'></i> Add new</button>
+                                    <i className='fa fa-plus-circle'></i> Thêm mới</button>
                                 <form
                                     className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search search-for  ">
                                     <div className="input-group" style={{ marginLeft: "900px" }}>

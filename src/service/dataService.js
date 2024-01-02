@@ -15,7 +15,6 @@ const updateCategory = (categoryData) => {
 
 // CUSTOMER
 const getListCustomers = (keyWord, page, size) => {
-    console.log("key:", keyWord)
     return axios.get(`http://localhost:8080/customers?keyword=${keyWord}&pageNumber=${page}&pageSize=${size}`)
 }
 const createNewCustomer = (customerData) => {
@@ -23,10 +22,10 @@ const createNewCustomer = (customerData) => {
 }
 const updateCustomer = (customerData) => {
 
-    // return axios.put(`http://localhost:8080/suppliers/${supplierData.id}`, { ...supplierData })
+    return axios.put(`http://localhost:8080/customers/${customerData.id}`, { ...customerData })
 }
-const deleteCustomer = (supplierData) => {
-    return axios.delete(`http://localhost:8080/suppliers/${supplierData.id}`)
+const deleteCustomer = (customerData) => {
+    return axios.delete(`http://localhost:8080/customers/${customerData.id}`)
 }
 //SUPPLIER
 const getListSuppliers = (keyWord, page, size) => {
@@ -106,7 +105,7 @@ const updateUser = () => {
 
 export {
     getListCategories, deleteCategory, updateCategory, createCartegory,
-    getListCustomers, createNewCustomer, updateCustomer,
+    getListCustomers, createNewCustomer, updateCustomer, deleteCustomer,
     getListSuppliers, createNewSupplier, updateSupplier, deleteSupplier,
     getListProduct, createNewProduct, updateProduct, getAllCategory, deleteProduct, getProductByID,
     getListWarehouseReceipt, createNewWarehouseReceipt, getAllSuppliers, getAllProduct, updateWarehouseReceipt, getOneWh,

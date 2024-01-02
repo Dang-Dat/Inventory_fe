@@ -10,7 +10,7 @@ import { getListSuppliers, deleteSupplier } from '../../service/dataService'
 const Supplier = (props) => {
     const location = useLocation();
     const [pageNumber, setpageNumber] = useState(1);
-    const [pageSize, setPageSize] = useState(2); // so phan tu trong 1 page
+    const [pageSize, setPageSize] = useState(8); // so phan tu trong 1 page
     const [totalPages, setTotalPages] = useState(0);
     const [keyWord, setKeyWord] = useState("");
 
@@ -98,17 +98,13 @@ const Supplier = (props) => {
                     <div className="manage-users-container">
                         <div className="user-head">
                             <div className="title mt-3">
-                                <h3>Supplier</h3>
-
+                                <h3>Nhà cung cấp</h3>
                             </div>
                             <div className="actions">
-                                <button className="btn btn-success refresh"
-
-                                ><i className='fa fa-refresh '></i> refresh</button>
                                 <button className="btn btn-primary"
                                     onClick={() => { setIsShowModalSupplier(true); setActionModalSuppliers("CREATE") }}
                                 >
-                                    <i className='fa fa-plus-circle'></i> Add new</button>
+                                    <i className='fa fa-plus-circle'></i> Thêm mới</button>
                                 <form
                                     className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search search-for  ">
                                     <div className="input-group" style={{ marginLeft: "900px" }}>
@@ -132,14 +128,14 @@ const Supplier = (props) => {
                             <table className="table table-borderred table-hover">
                                 <thead>
                                     <tr>
-                                        {/* <th scope="col">#</th> */}
-                                        <th style={{ width: '5%' }} scope="col">id</th>
-                                        <th style={{ width: '15%' }} scope="col">Nhà cung cấp</th>
-                                        <th style={{ width: '15%' }} scope="col">Email</th>
-                                        <th style={{ width: '10%' }} scope="col">Phone</th>
-                                        <th style={{ width: '20%' }} scope="col">Address</th>
-                                        <th style={{ width: '20%' }} scope="col">Note</th>
-                                        <th style={{ width: '15%' }}>Actions</th>
+                                        <th style={{ width: '4%' }} scope="col">STT</th>
+                                        {/* <th style={{ width: '4%' }} scope="col">id</th> */}
+                                        <th style={{ width: '' }} scope="col">Nhà cung cấp</th>
+                                        <th style={{ width: '' }} scope="col">Email</th>
+                                        <th style={{ width: '' }} scope="col">Phone</th>
+                                        <th style={{ width: '' }} scope="col">Address</th>
+                                        <th style={{ width: '' }} scope="col">Note</th>
+                                        <th style={{ width: '16%' }}>Actions</th>
 
                                     </tr>
                                 </thead>
@@ -149,14 +145,14 @@ const Supplier = (props) => {
                                             {listSuppliers.map((item, index) => {
                                                 return (
                                                     <tr key={`row-${index}`}>
-                                                        {/* <td>{(currentPage - 1) * pageSize + index + 1}</td> */}
-                                                        <td>{item.id}</td>
+                                                        <td>{(pageNumber - 1) * pageSize + index + 1}</td>
+                                                        {/* <td>{item.id}</td> */}
                                                         <td>{item.fullName}</td>
-                                                        <td>{item.phone}</td>
                                                         <td>{item.email}</td>
+                                                        <td>{item.phone}</td>
                                                         <td>{item.address}</td>
                                                         <td>{item.note}</td>
-                                                        {/* <td>{item.products ? item.products.name : ''}</td> */}
+
                                                         <td>
                                                             <button className="btn btn-warning mx-3"
                                                                 onClick={() => hanldeUpdateSupplier(item)}

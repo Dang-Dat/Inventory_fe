@@ -71,7 +71,7 @@ const Dashboard = (props) => {
                         </a>
 
                         <a className="nav-link" href="/">
-                            <i className="fas fa-fw fa-tachometer-alt"></i>
+                            <i class="fa-sharp fa-solid fa-house"></i>
                             Dashboard
                         </a>
                     </li>
@@ -81,7 +81,7 @@ const Dashboard = (props) => {
 
 
                     <div className="sidebar-heading">
-                        Interface
+
                     </div>
 
                     {/* <!-- Nav Item - Pages Collapse Menu --> */}
@@ -100,7 +100,7 @@ const Dashboard = (props) => {
                     </li>
                     <li className="nav-item">
                         <NavLink className="nav-link collapsed" to="/customer" >
-                            <i className="fas fa-fw fa-wrench"></i>
+                            <i className="fa-solid fa-user"></i>
                             Khách hàng
                         </NavLink>
 
@@ -124,8 +124,8 @@ const Dashboard = (props) => {
 
                     <li className="nav-item">
                         <NavLink className="nav-link collapsed" to="/category" onClick={() => handleShowCategory()} >
-                            <i className="fas fa-fw fa-wrench"></i>
-                            Category
+                            <i class="fa-solid fa-layer-group"></i>
+                            Loại thuốc
                         </NavLink>
 
                     </li>
@@ -136,7 +136,7 @@ const Dashboard = (props) => {
 
                     {/* <!-- Heading --> */}
                     <div className="sidebar-heading">
-                        Hoa Don
+
                     </div>
                     <li className="nav-item">
                         <NavLink className="nav-link collapsed" to="/receipt"  >
@@ -145,33 +145,15 @@ const Dashboard = (props) => {
                         </NavLink>
 
                     </li>
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                         <NavLink className="nav-link collapsed" to="/test"  >
                             <i className="fas fa-fw fa-wrench"></i>
                             TÉT
                         </NavLink>
 
-                    </li>
+                    </li> */}
                     {/* <!-- Nav Item - Pages Collapse Menu --> */}
-                    <li className="nav-item">
-                        <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                            aria-expanded="true" aria-controls="collapsePages">
-                            <i className="fas fa-fw fa-folder"></i>
-                            <span>Pages</span>
-                        </a>
-                        <div id="collapsePages" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                            <div className="bg-white py-2 collapse-inner rounded">
-                                <h6 className="collapse-header">Login Screens:</h6>
-                                <a className="collapse-item" href="login.html">Login</a>
-                                <a className="collapse-item" href="register.html">Register</a>
-                                <a className="collapse-item" href="forgot-password.html">Forgot Password</a>
-                                <div className="collapse-divider"></div>
-                                <h6 className="collapse-header">Other Pages:</h6>
-                                <a className="collapse-item" href="404.html">404 Page</a>
-                                <a className="collapse-item" href="blank.html">Blank Page</a>
-                            </div>
-                        </div>
-                    </li>
+
 
 
                     <li className="nav-item">

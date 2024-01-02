@@ -103,16 +103,14 @@ const Category = (props) => {
                     <div className="manage-users-container">
                         <div className="user-head">
                             <div className="title mt-3">
-                                <h3>Category</h3>
+                                <h3>Loại thuốc</h3>
 
                             </div>
                             <div className="actions" >
-                                <button className="btn btn-success refresh"
-                                    onClick={() => hanldeRefresh()}
-                                ><i className='fa fa-refresh'></i> refresh</button>
+
                                 <button className="btn btn-primary"
                                     onClick={() => { setIsShowModalCategory(true); setActionModalCategory("CREATE") }}
-                                ><i className='fa fa-plus-circle'></i> Add new</button>
+                                ><i className='fa fa-plus-circle'></i> Thêm mới</button>
 
                                 <form
                                     className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search search-for  ">
@@ -138,7 +136,7 @@ const Category = (props) => {
                                 <thead>
                                     <tr>
                                         <th style={{ width: '5%' }} scope="col">#</th>
-                                        <th scope="col">id</th>
+
                                         <th scope="col">Loại Thuốc</th>
                                         <th scope="col">Mô tả</th>
                                         <th >Actions</th>
@@ -152,7 +150,7 @@ const Category = (props) => {
                                                 return (
                                                     <tr key={`row-${index}`}>
                                                         <td>{(pageNumber - 1) * pageSize + index + 1}</td>
-                                                        <td>{item.id}</td>
+
                                                         <td>{item.name}</td>
                                                         <td>{item.description}</td>
 

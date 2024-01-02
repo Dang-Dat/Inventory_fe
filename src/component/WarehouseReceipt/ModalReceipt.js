@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import './Receipt.css'
 import { createNewWarehouseReceipt, updateSupplier, getAllSuppliers, getAllProduct } from '../../service/dataService'
 import { toast } from 'react-toastify';
 import _ from "lodash";
@@ -176,20 +177,24 @@ const ModalReceipt = (props) => {
                         </div>
                         <div className='col-12 col-sm-6 form-group' >
                             <label>Nhà cung cấp (<span className='red'>*</span>) :</label>
+
+
                             <select disabled={action === 'CREATE' ? false : true} className={validInputs.supplierId ? 'form-select' : 'form-select is-invalid'}
                                 name="supplierId" onChange={handleChangeform}
                                 value={receiptData.supplierId}
+
                             >
-                                <option selected>Chọn</option>
+                                <option selected >Chọn</option>
                                 {supplierData.length > 0 &&
                                     supplierData.map((item, index) => {
                                         return (
-                                            <option key={`group-${index}`} value={item.id}>{item.fullName}</option>
+                                            <option key={`supplierData-${index}`} value={item.id}>{item.fullName}</option>
                                         )
 
                                     })
                                 }
                             </select>
+
                         </div>
 
 
@@ -211,6 +216,7 @@ const ModalReceipt = (props) => {
                                         <select className={'form-select'} id={`productId${index}`}
                                             name="productId" value={detail.productId}
                                             onChange={(e) => handleDetailChange(index, e)}
+
                                         >
                                             <option selected>Chọn</option>
                                             {productData.length > 0 &&

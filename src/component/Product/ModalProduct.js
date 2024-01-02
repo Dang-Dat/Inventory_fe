@@ -27,7 +27,6 @@ const ModalProduct = (props) => {
     }, [])
     useEffect(() => {
         if (action === 'UPDATE') {
-            console.log("update", dataModalUpdate)
             setProductData({ ...dataModalUpdate, categoryId: dataModalUpdate.category ? dataModalUpdate.category.id : '' });
 
         }
@@ -46,7 +45,7 @@ const ModalProduct = (props) => {
         let response = await getAllCategory();
         if (response && response.data) {
             setCategoryData(response.data)
-            // setProductData(...productData, categoryId[0].id)
+
         }
     }
     const handleOnchangeInput = (value, name) => {
