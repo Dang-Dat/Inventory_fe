@@ -77,7 +77,7 @@ const ModalCustomer = (props) => {
         setValidInputs(validInputDefault);
         let checkPasswordWhitespace = /\s/;
         let reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!customerData.fullName || checkPasswordWhitespace.test(customerData.fullName)) {
+        if (!customerData.fullName) {
             toast.error("err ");
             setValidInputs({ ...validInputDefault, fullName: false });
             return false

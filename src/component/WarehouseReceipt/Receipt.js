@@ -126,13 +126,13 @@ const Receipt = (props) => {
                             <table className="table table-borderred table-hover">
                                 <thead>
                                     <tr>
-                                        <th style={{ width: '5%' }} scope="col">#</th>
+                                        <th style={{ width: '4%' }} scope="col">STT</th>
                                         <th style={{ width: '20%' }} scope="col">Mã hóa đơn</th>
                                         <th style={{ width: '20%' }} scope="col">Nhà cung cấp</th>
                                         <th style={{ width: '30%' }} scope="col">Ghi chú</th>
 
 
-                                        <th style={{ width: '15%' }}>Actions</th>
+                                        <th style={{ width: '16%' }}>Actions</th>
 
                                     </tr>
                                 </thead>

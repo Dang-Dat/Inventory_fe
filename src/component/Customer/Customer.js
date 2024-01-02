@@ -121,8 +121,7 @@ const Customer = (props) => {
                             <table className="table table-borderred table-hover">
                                 <thead>
                                     <tr>
-                                        {/* <th scope="col">#</th> */}
-                                        <th scope="col">id</th>
+                                        <th style={{ width: '4%' }} scope="col">STT</th>
                                         <th scope="col">name</th>
                                         <th scope="col">phone</th>
                                         <th scope="col">Email</th>
@@ -148,10 +147,10 @@ const Customer = (props) => {
                                                         <td>
                                                             <button className="btn btn-warning mx-3"
                                                                 onClick={() => hanldeUpdateUser(item)}
-                                                            ><i className="fa fa-pencil-square-o"></i>Edit</button>
+                                                            ><i className="fa fa-pencil-square-o"></i></button>
                                                             <button className="btn btn-danger"
                                                                 onClick={() => hanldeDeleteUser(item)}
-                                                            ><i className="fa fa-trash" ></i>Delete</button>
+                                                            ><i className="fa fa-trash" ></i></button>
                                                         </td>
 
                                                     </tr>
@@ -170,12 +169,12 @@ const Customer = (props) => {
                         {totalPages > 0 &&
                             <div className="user-footer">
                                 <ReactPaginate
-                                    nextLabel="next >"
+                                    nextLabel=">"
                                     onPageChange={handlePageClick}
                                     pageRangeDisplayed={3}
                                     marginPagesDisplayed={2}
                                     pageCount={totalPages}
-                                    previousLabel="< previous"
+                                    previousLabel="<"
                                     pageClassName="page-item"
                                     pageLinkClassName="page-link"
                                     previousClassName="page-item"
