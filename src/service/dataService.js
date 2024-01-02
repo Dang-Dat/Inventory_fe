@@ -48,6 +48,9 @@ const updateSupplier = (supplierData) => {
 const getListProduct = (keyWord, page, size) => {
     return axios.get(`http://localhost:8080/products?keyword=${keyWord}&pageNumber=${page}&pageSize=${size}`)
 }
+const getProductByID = (productData) => {
+    return axios.get(`http://localhost:8080/products/${productData.id}`)
+}
 const deleteProduct = (productData) => {
     return axios.delete(`http://localhost:8080/products/${productData.id}`)
 }
@@ -76,10 +79,11 @@ const getAllProduct = () => {
     return axios.get('http://localhost:8080/products/get-all')
 }
 const updateWarehouseReceipt = (receiptData) => {
-
-    return axios.put(`http://localhost:8080/warehouse-import/${receiptData.id}`, { ...receiptData })
+    return axios.put(`http://localhost:8080/warehouse-import/${receiptData.idWarehouseImport}`, { ...receiptData })
 }
-
+const getOneWh = (receiptData) => {
+    return axios.get(`http://localhost:8080/warehouse-import/${receiptData.idWarehouseImport}`)
+}
 const fetchAllUsers = (page, limit) => {
     // return axios.get(``)
 }
@@ -104,8 +108,8 @@ export {
     getListCategories, deleteCategory, updateCategory, createCartegory,
     getListCustomers, createNewCustomer, updateCustomer,
     getListSuppliers, createNewSupplier, updateSupplier, deleteSupplier,
-    getListProduct, createNewProduct, updateProduct, getAllCategory, deleteProduct,
-    getListWarehouseReceipt, createNewWarehouseReceipt, getAllSuppliers, getAllProduct, updateWarehouseReceipt,
+    getListProduct, createNewProduct, updateProduct, getAllCategory, deleteProduct, getProductByID,
+    getListWarehouseReceipt, createNewWarehouseReceipt, getAllSuppliers, getAllProduct, updateWarehouseReceipt, getOneWh,
     deleteUser, fetchAllUsers, updateUser, createNewUser,
     fetchAllGroup,
 }

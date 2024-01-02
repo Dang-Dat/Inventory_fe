@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
 import ModalReceipt from './ModalReceipt';
 import _ from "lodash";
-import { getListWarehouseReceipt, deleteSupplier } from '../../service/dataService'
+import { getListWarehouseReceipt, deleteSupplier, getOneWh } from '../../service/dataService'
 const Receipt = (props) => {
     const location = useLocation();
     const [pageNumber, setpageNumber] = useState(1);
@@ -59,14 +59,16 @@ const Receipt = (props) => {
         }
         setIsShowModalDelete(false);
     }
-    const hanldeDeleteReceipt = (receipt) => {
-        setDataModalDelete(receipt);
+    const hanldeDeleteReceipt = (code) => {
+        setDataModalDelete(code);
         setIsShowModalDelete(true);
     }
-    const hanldeUpdateReceipt = (receipt) => {
+    const hanldeUpdateReceipt = async (receipt) => {
+        let response = await getOneWh(receipt);
+
         setActionModalReceipt('UPDATE')
         setIsShowModalReceipt(true);
-        setDataModalUpdate(receipt);
+        setDataModalUpdate(response.data.data);
     }
 
     const hanldeRefresh = async () => {
@@ -92,7 +94,6 @@ const Receipt = (props) => {
                         <div className="user-head">
                             <div className="title mt-3">
                                 <h3>Nhập kho</h3>
-
                             </div>
                             <div className="actions">
                                 <button className="btn btn-success refresh"
@@ -125,13 +126,13 @@ const Receipt = (props) => {
                             <table className="table table-borderred table-hover">
                                 <thead>
                                     <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Mã hóa đơn</th>
-                                        <th scope="col">Nhà cung cấp</th>
-                                        <th scope="col">Ghi chú</th>
+                                        <th style={{ width: '5%' }} scope="col">#</th>
+                                        <th style={{ width: '20%' }} scope="col">Mã hóa đơn</th>
+                                        <th style={{ width: '20%' }} scope="col">Nhà cung cấp</th>
+                                        <th style={{ width: '30%' }} scope="col">Ghi chú</th>
 
 
-                                        <th >Actions</th>
+                                        <th style={{ width: '15%' }}>Actions</th>
 
                                     </tr>
                                 </thead>
@@ -142,15 +143,13 @@ const Receipt = (props) => {
                                                 return (
                                                     <tr key={`row-${index}`}>
                                                         <td>{(pageNumber - 1) * pageSize + index + 1}</td>
-
                                                         <td>{item.code}</td>
                                                         <td>{item.supplierName}</td>
                                                         <td>{item.note}</td>
 
-
                                                         <td>
                                                             <button className="btn btn-info "
-                                                               
+
                                                             ><i className="fa-solid fa-eye"></i></button>
                                                             <button className="btn btn-warning mx-2"
                                                                 onClick={() => hanldeUpdateReceipt(item)}
@@ -176,12 +175,12 @@ const Receipt = (props) => {
                         {totalPages > 0 &&
                             <div className="user-footer">
                                 <ReactPaginate
-                                    nextLabel="next >"
+                                    nextLabel=" >"
                                     onPageChange={handlePageClick}
                                     pageRangeDisplayed={3}
                                     marginPagesDisplayed={2}
                                     pageCount={totalPages}
-                                    previousLabel="< previous"
+                                    previousLabel="< "
                                     pageClassName="page-item"
                                     pageLinkClassName="page-link"
                                     previousClassName="page-item"

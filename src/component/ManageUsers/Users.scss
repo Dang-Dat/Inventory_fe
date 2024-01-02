@@ -4,7 +4,7 @@
             color: red;
         }
     }
-}   
+}
 
 .manage-users-container {
     i {
@@ -17,6 +17,21 @@
         }
     }
 }
+
+.table {
+    table-layout: fixed;
+    width: 100%;
+    
+    th {
+
+        border: 1px solid #ddd;
+    }
+
+    td {
+        border: 1px solid #ddd;
+    }
+}
+
 
 .container {
     .user-body {

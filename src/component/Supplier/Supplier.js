@@ -133,14 +133,13 @@ const Supplier = (props) => {
                                 <thead>
                                     <tr>
                                         {/* <th scope="col">#</th> */}
-                                        <th scope="col">id</th>
-                                        <th scope="col">Nhà cung cấp</th>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">Phone</th>
-                                        <th scope="col">Address</th>
-                                        <th scope="col">Note</th>
-
-                                        <th >Actions</th>
+                                        <th style={{ width: '5%' }} scope="col">id</th>
+                                        <th style={{ width: '15%' }} scope="col">Nhà cung cấp</th>
+                                        <th style={{ width: '15%' }} scope="col">Email</th>
+                                        <th style={{ width: '10%' }} scope="col">Phone</th>
+                                        <th style={{ width: '20%' }} scope="col">Address</th>
+                                        <th style={{ width: '20%' }} scope="col">Note</th>
+                                        <th style={{ width: '15%' }}>Actions</th>
 
                                     </tr>
                                 </thead>
@@ -161,10 +160,10 @@ const Supplier = (props) => {
                                                         <td>
                                                             <button className="btn btn-warning mx-3"
                                                                 onClick={() => hanldeUpdateSupplier(item)}
-                                                            ><i className="fa fa-pencil-square-o"></i>Edit</button>
+                                                            ><i className="fa-regular fa-pen-to-square"></i></button>
                                                             <button className="btn btn-danger"
                                                                 onClick={() => hanldeDeleteSupplier(item)}
-                                                            ><i className="fa fa-trash" ></i>Delete</button>
+                                                            ><i className="fa fa-trash" ></i></button>
                                                         </td>
 
                                                     </tr>
@@ -183,12 +182,12 @@ const Supplier = (props) => {
                         {totalPages > 0 &&
                             <div className="user-footer">
                                 <ReactPaginate
-                                    nextLabel="next >"
+                                    nextLabel=" >"
                                     onPageChange={handlePageClick}
                                     pageRangeDisplayed={3}
                                     marginPagesDisplayed={2}
                                     pageCount={totalPages}
-                                    previousLabel="< previous"
+                                    previousLabel="<"
                                     pageClassName="page-item"
                                     pageLinkClassName="page-link"
                                     previousClassName="page-item"

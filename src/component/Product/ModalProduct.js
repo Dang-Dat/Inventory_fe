@@ -7,7 +7,6 @@ import _ from "lodash";
 //not merge state
 const ModalProduct = (props) => {
     const { action, dataModalUpdate } = props;
-    const [category, setCategory] = useState([]);
     const defaultProductData = {
         name: '',
         quantity: '',
@@ -28,14 +27,16 @@ const ModalProduct = (props) => {
     }, [])
     useEffect(() => {
         if (action === 'UPDATE') {
-            setProductData({ ...dataModalUpdate });
+            console.log("update", dataModalUpdate)
+            setProductData({ ...dataModalUpdate, categoryId: dataModalUpdate.category ? dataModalUpdate.category.id : '' });
+
         }
     }, [dataModalUpdate])
     useEffect(() => {
         if (action === 'CREATE') {
-            if (category && category.length > 0) {
-                setProductData({ ...productData, categoryId: category[0].id })
-            }
+
+            setProductData({ ...productData })
+
             // setProductData({ ...productData })
         }
 
@@ -45,13 +46,14 @@ const ModalProduct = (props) => {
         let response = await getAllCategory();
         if (response && response.data) {
             setCategoryData(response.data)
+            // setProductData(...productData, categoryId[0].id)
         }
     }
     const handleOnchangeInput = (value, name) => {
         let _Data = _.cloneDeep(productData)
         _Data[name] = value;
         setProductData(_Data);
-        
+
     }
     const checkValidateInputs = () => {
         if (action === 'UPDATE') return true;
@@ -104,6 +106,7 @@ const ModalProduct = (props) => {
             let response = action === 'CREATE' ?
                 await createNewProduct({ ...productData }) : await updateProduct({ ...productData });
 
+            //await createNewProduct({ ...productData })
             if (response.data) {
                 props.onHide();
                 setProductData({ ...defaultProductData });
@@ -120,6 +123,7 @@ const ModalProduct = (props) => {
         props.onHide();
         setProductData(defaultProductData)
         setValidInputs(validInputDefault);
+
     }
 
     return (
@@ -128,7 +132,7 @@ const ModalProduct = (props) => {
                 <Modal.Header closeButton onHide={() => handleCloseModalSupplier()} >
 
                     <Modal.Title id="contained-modal-title-vencenter">
-                        <span>{props.action === 'CREATE' ? 'CREATE NEW PRODUCT' : 'EDIT PRODUCT'}</span>
+                        <span>{props.action === 'CREATE' ? 'Tạo mới sản phẩm' : 'Chỉnh sửa sản phẩm'}</span>
                     </Modal.Title>
 
                 </Modal.Header>
@@ -161,10 +165,8 @@ const ModalProduct = (props) => {
 
                                             <option key={`group-${index}`} value={item.id}>{item.name}</option>
                                         )
-
                                     })
                                 }
-
                             </select>
                         </div>
                         <div className='col-12 col-sm-6 form-group' >

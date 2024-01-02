@@ -27,8 +27,6 @@ const ModalReceipt = (props) => {
             quantity: true,
             price: true
         }]
-
-
     }
 
     const [receiptData, setReceiptData] = useState(defaultReceiptData);
@@ -41,8 +39,19 @@ const ModalReceipt = (props) => {
         fetchAllProduct();
     }, [])
     useEffect(() => {
-        if (action === 'UPDATE') {
-            setReceiptData({ ...dataModalUpdate });
+        if (action === 'UPDATE' && dataModalUpdate && dataModalUpdate.detailImport) {
+            console.log("update", dataModalUpdate)
+            setReceiptData({
+                ...dataModalUpdate,
+                supplierId: dataModalUpdate.supplierId,
+                createWarehouseImportDetailDto: dataModalUpdate.detailImport.map(detail => ({
+                    productId: detail.id, // Cần cập nhật với giá trị thích hợp từ dữ liệu sản phẩm
+                    quantity: detail.quantity,
+                    price: detail.price
+                }))
+
+
+            });
         }
     }, [dataModalUpdate])
     useEffect(() => {
@@ -66,24 +75,6 @@ const ModalReceipt = (props) => {
             setProductData(response.data.data)
         }
     }
-    // check product
-    // const checkProductInputs = () => {
-    //     if (action === 'UPDATE') return true;
-    //     setValidProductInputs(validProductInputDefault);
-    //     let arr = [];
-    //     let check = true;
-    //     for (let i = 0; i < arr.length; i++) {
-    //         if (!receiptData[arr[i]]) {
-    //             let _validInputs = _.cloneDeep(validProductInputDefault);
-    //             _validInputs[arr[i]] = false;
-    //             setValidProductInputs(_validInputs)
-    //             toast.error(`Empty input ${arr[i]} `);
-    //             check = false;
-    //             break;
-    //         }
-    //     }
-    //     return check;
-    // }
 
     //check 
     const checkValidateInputs = () => {
@@ -144,7 +135,10 @@ const ModalReceipt = (props) => {
     }
     const handleCloseModalReceipt = () => {
         props.onHide();
-        setReceiptData(defaultReceiptData)
+        setReceiptData((prevData) => ({
+            ...defaultReceiptData,
+            createWarehouseImportDetailDto: prevData.createWarehouseImportDetailDto || []
+        }));
         setValidInputs(validInputDefault);
     }
     // Hàm xử lý khi thêm chi tiết nhập kho
@@ -175,14 +169,14 @@ const ModalReceipt = (props) => {
                     <div className='content-body row'>
                         <div className='col-12 col-sm-6 form-group' >
                             <label>Mã hóa đơn(<span className='red'>*</span>) :</label>
-                            <input
+                            <input disabled={action === 'CREATE' ? false : true}
                                 className={validInputs.code ? 'form-control' : 'form-control is-invalid'} type="text"
                                 name="code" value={receiptData.code} onChange={handleChangeform}
                             />
                         </div>
                         <div className='col-12 col-sm-6 form-group' >
                             <label>Nhà cung cấp (<span className='red'>*</span>) :</label>
-                            <select className={validInputs.supplierId ? 'form-select' : 'form-select is-invalid'}
+                            <select disabled={action === 'CREATE' ? false : true} className={validInputs.supplierId ? 'form-select' : 'form-select is-invalid'}
                                 name="supplierId" onChange={handleChangeform}
                                 value={receiptData.supplierId}
                             >
@@ -209,15 +203,11 @@ const ModalReceipt = (props) => {
                         <div className='col-12 col-sm-12 form-group '  >
                             <label><h6>Danh sách sản phẩm :</h6></label>
                         </div>
-                        {receiptData.createWarehouseImportDetailDto.map((detail, index) => (
+                        {receiptData.createWarehouseImportDetailDto && receiptData.createWarehouseImportDetailDto.map((detail, index) => (
                             <div key={index}>
                                 <div className='d-flex'>
                                     <div className='col-4 col-sm-4 form-group' >
                                         <label>Tên thuốc(<span className='red'>*</span>) :</label>
-                                        {/* <input
-                                            className={'form-control'} type="text"
-                                            id={`productId${index}`} name="productId" value={detail.productId} onChange={(e) => handleDetailChange(index, e)}
-                                        /> */}
                                         <select className={'form-select'} id={`productId${index}`}
                                             name="productId" value={detail.productId}
                                             onChange={(e) => handleDetailChange(index, e)}
@@ -228,7 +218,6 @@ const ModalReceipt = (props) => {
                                                     return (
                                                         <option key={`group-${index}`} value={item.id}>{item.name}</option>
                                                     )
-
                                                 })
                                             }
                                         </select>

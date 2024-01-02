@@ -131,7 +131,7 @@ const ModalCustomer = (props) => {
             <Modal size="lg" show={props.show} className='modal-user'>
                 <Modal.Header closeButton onHide={() => handleCloseModalCustomer()} >
                     <Modal.Title id="contained-modal-title-vencenter">
-                        <span>{props.action === 'CREATE' ? 'CREATE NEW CUSTOMER' : 'EDIT CUSTOMER'}</span>
+                        <span>{props.action === 'CREATE' ? 'Tạo mới khách hàng' : 'Chỉnh sửa thông tin khách hàng'}</span>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

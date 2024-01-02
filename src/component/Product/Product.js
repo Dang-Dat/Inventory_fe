@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ModalProduct from "./ModalProduct";
 import ModalDeleteProduct from "./ModalDeleteProduct";
-import { getListProduct, deleteProduct } from '../../service/dataService';
+import { getListProduct, deleteProduct, getProductByID } from '../../service/dataService';
 import _ from "lodash";
 import ReactPaginate from 'react-paginate';
 const Product = (props) => {
@@ -32,6 +32,7 @@ const Product = (props) => {
         if (response && response.data) {
             setTotalPages(response.data.data.totalPageNumber);
             setListProduct(response.data.data.list)
+
         }
     }
     //modal update/create user
@@ -68,10 +69,11 @@ const Product = (props) => {
         setDataModalDelete(supplier);
         setIsShowModalDelete(true);
     }
-    const hanldeUpdateProduct = (user) => {
+    const hanldeUpdateProduct = async (product) => {
+        let res = await getProductByID(product)
         setActionModalProduct('UPDATE')
         setIsShowModalProduct(true);
-        setDataModalUpdate(user);
+        setDataModalUpdate(res.data.data);
     }
     const handlePageClick = async (event) => {
         await setpageNumber(+event.selected + 1);
@@ -148,10 +150,9 @@ const Product = (props) => {
                                                         <td>{item.id}</td>
                                                         <td>{item.name}</td>
                                                         <td>{item.quantity}</td>
-                                                        <td>{item.catgoryName}</td>
+                                                        <td>{item.category.name}</td>
                                                         <td>{item.description}</td>
 
-                                                        
                                                         <td>
                                                             <button className="btn btn-warning mx-3"
                                                                 onClick={() => hanldeUpdateProduct(item)}

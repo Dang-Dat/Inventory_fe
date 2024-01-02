@@ -51,7 +51,7 @@ const Category = (props) => {
     //page
     const handlePageClick = async (event) => {
         await setpageNumber(+event.selected + 1);
-        
+
     };
 
     const handleClose = () => {
@@ -137,7 +137,7 @@ const Category = (props) => {
                             <table className="table table-borderred table-hover">
                                 <thead>
                                     <tr>
-                                        <th scope="col">#</th>
+                                        <th style={{ width: '5%' }} scope="col">#</th>
                                         <th scope="col">id</th>
                                         <th scope="col">Loại Thuốc</th>
                                         <th scope="col">Mô tả</th>
@@ -159,10 +159,10 @@ const Category = (props) => {
                                                         <td>
                                                             <button className="btn btn-warning mx-3"
                                                                 onClick={() => hanldeUpdateCategory(item)}
-                                                            ><i className="fa fa-pencil-square-o"></i>Edit</button>
+                                                            ><i className="fa-regular fa-pen-to-square"></i></button>
                                                             <button className="btn btn-danger"
                                                                 onClick={() => hanldeDeleteCategory(item)}
-                                                            ><i className="fa fa-trash" ></i>Delete</button>
+                                                            ><i className="fa fa-trash" ></i></button>
                                                         </td>
 
                                                     </tr>
@@ -181,12 +181,12 @@ const Category = (props) => {
                         {totalPages > 0 &&
                             <div className="user-footer">
                                 <ReactPaginate
-                                    nextLabel="next >"
+                                    nextLabel=">"
                                     onPageChange={handlePageClick}
                                     pageRangeDisplayed={3}
                                     marginPagesDisplayed={2}
                                     pageCount={totalPages}
-                                    previousLabel="< previous"
+                                    previousLabel="<"
                                     pageClassName="page-item"
                                     pageLinkClassName="page-link"
                                     previousClassName="page-item"
