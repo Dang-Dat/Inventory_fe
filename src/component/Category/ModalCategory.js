@@ -31,7 +31,6 @@ const ModalCategory = (props) => {
     }, [])
     useEffect(() => {
         if (action === 'UPDATE') {
-
             setCategoryData({ ...dataModalUpdate });
         }
     }, [dataModalUpdate])
@@ -93,7 +92,7 @@ const ModalCategory = (props) => {
             <Modal size="lg" show={props.show} className='modal-user'>
                 <Modal.Header closeButton onHide={() => handleCloseModalCategory()} >
                     <Modal.Title id="contained-modal-title-vencenter">
-                        <span>{props.action === 'CREATE' ? 'CREATE NEW CATEGORY' : 'EDIT CATEGORY'}</span>
+                        <span>{props.action === 'CREATE' ? 'Tạo mới loại sản phẩm' : 'Chỉnh sửa thông tin loại sản phẩm'}</span>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -112,8 +111,6 @@ const ModalCategory = (props) => {
                                 onChange={(event) => handleOnchangeInput(event.target.value, "description")}
                             />
                         </div>
-
-
                     </div>
                 </Modal.Body>
                 <Modal.Footer>

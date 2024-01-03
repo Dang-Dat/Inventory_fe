@@ -143,18 +143,7 @@ const Dashboard = (props) => {
                             <i className="fa-solid fa-clipboard"></i>
                             Nhập kho
                         </NavLink>
-
                     </li>
-                    {/* <li className="nav-item">
-                        <NavLink className="nav-link collapsed" to="/test"  >
-                            <i className="fas fa-fw fa-wrench"></i>
-                            TÉT
-                        </NavLink>
-
-                    </li> */}
-                    {/* <!-- Nav Item - Pages Collapse Menu --> */}
-
-
 
                     <li className="nav-item">
                         <a className="dropdown-item nav-link" href="#" data-toggle="modal" data-target="#logoutModal">

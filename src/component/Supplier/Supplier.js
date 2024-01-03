@@ -128,14 +128,14 @@ const Supplier = (props) => {
                             <table className="table table-borderred table-hover">
                                 <thead>
                                     <tr>
-                                        <th style={{ width: '4%' }} scope="col">STT</th>
+                                        <th style={{ width: '3%' }} scope="col">STT</th>
                                         {/* <th style={{ width: '4%' }} scope="col">id</th> */}
                                         <th style={{ width: '' }} scope="col">Nhà cung cấp</th>
                                         <th style={{ width: '' }} scope="col">Email</th>
                                         <th style={{ width: '' }} scope="col">Phone</th>
                                         <th style={{ width: '' }} scope="col">Address</th>
-                                        <th style={{ width: '' }} scope="col">Note</th>
-                                        <th style={{ width: '16%' }}>Actions</th>
+                                        <th style={{ width: '20%' }} scope="col">Note</th>
+                                        <th style={{ width: '12%' }}>Actions</th>
 
                                     </tr>
                                 </thead>

@@ -11,7 +11,7 @@ const Product = (props) => {
     const location = useLocation();
 
     const [pageNumber, setpageNumber] = useState(1);
-    const [pageSize, setPageSize] = useState(2); // so phan tu trong 1 page
+    const [pageSize, setPageSize] = useState(6); // so phan tu trong 1 page
     const [totalPages, setTotalPages] = useState(0);
     const [keyWord, setKeyWord] = useState("");
     useEffect(() => {
@@ -129,11 +129,11 @@ const Product = (props) => {
                                     <tr>
                                         {/* <th scope="col">#</th> */}
                                         <th style={{ width: '4%' }} scope="col">id</th>
-                                        <th scope="col">Tên thuốc</th>
-                                        <th scope="col">Số lượng</th>
-                                        <th scope="col">Loại Thuốc</th>
-                                        <th scope="col">Mô tả</th>
-                                        <th style={{ width: '16%' }}>Actions</th>
+                                        <th style={{ width: '15%' }} scope="col">Tên thuốc</th>
+                                        <th style={{ width: '10%' }} scope="col">Số lượng</th>
+                                        <th style={{ width: '15%' }} scope="col">Loại Thuốc</th>
+                                        <th style={{ width: '' }} scope="col">Mô tả</th>
+                                        <th style={{ width: '12%' }}>Actions</th>
 
                                     </tr>
                                 </thead>

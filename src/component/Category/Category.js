@@ -11,8 +11,9 @@ import { getListCategories, deleteCategory } from '../../service/dataService'
 const Category = (props) => {
 
     const location = useLocation();
+
     const [pageNumber, setpageNumber] = useState(1);
-    const [pageSize, setPageSize] = useState(4); // so phan tu trong 1 page
+    const [pageSize, setPageSize] = useState(6); // so phan tu trong 1 page
     const [totalPages, setTotalPages] = useState(0);
     const [keyWord, setKeyWord] = useState("");
 
@@ -28,11 +29,9 @@ const Category = (props) => {
 
 
     const [listCategories, setListCategories] = useState([]);
-    const [categoryData, setCategoryData] = useState([]);
-    // const [getCategory,setGetCategory] = useState([]);
+
     const fetchCategories = async () => {
         let response = await getListCategories(pageNumber, keyWord, pageSize);
-
         if (response && response.data) {
             setTotalPages(response.data.data.totalPageNumber);
             setListCategories(response.data.data.list)
@@ -67,8 +66,7 @@ const Category = (props) => {
         setDataModalDelete(category);
         setIsShowModalDelete(true);
     }
-    const confirmDeleteCategory = async (category) => {
-
+    const confirmDeleteCategory = async () => {
         let response = await deleteCategory(dataModalDelete);
         if (response) {
             toast.success("Xoa thanh cong")
@@ -77,15 +75,11 @@ const Category = (props) => {
             toast.error("Co loi trong khi xoa")
         }
         setIsShowModalDelete(false);
-        // {props.show === true && location.pathname === '/category' ? true : 'd-none'}
     }
     const hanldeUpdateCategory = (data) => {
         setActionModalCategory('UPDATE')
         setIsShowModalCategory(true);
         setDataModalUpdate(data);
-    }
-    const hanldeRefresh = async () => {
-        await fetchCategories();
     }
     const handleOnchangeInput = (value) => {
         let _Data = _.cloneDeep(keyWord)
