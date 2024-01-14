@@ -12,6 +12,7 @@ import Category from "../component/Category/Category.js";
 import Suppliers from "../component/Supplier/Supplier.js";
 import Product from "../component/Product/Product.js"
 import Receipt from "../component/WarehouseReceipt/Receipt.js"
+import Export from '../component/WarehouseExport/Export.js'
 // import ImportForm from "../component/WarehouseReceipt/ModalDetail.js"
 // import PrivateRoutes from "./PrivateRoutes.js";
 const AppRoutes = (props) => {
@@ -51,6 +52,9 @@ const AppRoutes = (props) => {
                         </Route>
                         <Route path="/receipt">
                             <Receipt />
+                        </Route>
+                        <Route path="/export">
+                            <Export />
                         </Route>
                         {/* <Route path="/detail-import">
                             <ImportForm />

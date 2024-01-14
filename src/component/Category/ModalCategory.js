@@ -8,8 +8,6 @@ import _ from "lodash";
 const ModalCategory = (props) => {
     const { action, dataModalUpdate } = props;
 
-    const [name, setName] = useState("");
-    const [description, setDescriptions] = useState("");
 
     const defaultCategoryData = {
         name: '',

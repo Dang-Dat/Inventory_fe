@@ -69,7 +69,8 @@ const getListWarehouseReceipt = (keyWord, page, size) => {
     return axios.get(`http://localhost:8080/warehouse-import`)
 }
 const createNewWarehouseReceipt = (receiptData) => {
-    return axios.post('http://localhost:8080/warehouse-import', { ...receiptData })
+    console.log(receiptData)
+    // return axios.post('http://localhost:8080/warehouse-import', { ...receiptData })
 }
 const getAllSuppliers = () => {
     return axios.get('http://localhost:8080/suppliers/get-all')
@@ -80,8 +81,19 @@ const getAllProduct = () => {
 const updateWarehouseReceipt = (receiptData) => {
     return axios.put(`http://localhost:8080/warehouse-import/${receiptData.idWarehouseImport}`, { ...receiptData })
 }
-const getOneWh = (receiptData) => {
+const getWarehouseReceipt = (receiptData) => {
     return axios.get(`http://localhost:8080/warehouse-import/${receiptData.idWarehouseImport}`)
+}
+
+//Export
+const createNewWarehouseExport = (exportData) => {
+    return axios.post('http://localhost:8080/warehouse-export', { ...exportData })
+}
+const getListWarehouseExport = () => {
+    return axios.get(`http://localhost:8080/warehouse-`)
+}
+const getAllCustomer = () => {
+    return axios.get(`http://localhost:8080/customers/get-all`)
 }
 const fetchAllUsers = (page, limit) => {
     // return axios.get(``)
@@ -108,7 +120,8 @@ export {
     getListCustomers, createNewCustomer, updateCustomer, deleteCustomer,
     getListSuppliers, createNewSupplier, updateSupplier, deleteSupplier,
     getListProduct, createNewProduct, updateProduct, getAllCategory, deleteProduct, getProductByID,
-    getListWarehouseReceipt, createNewWarehouseReceipt, getAllSuppliers, getAllProduct, updateWarehouseReceipt, getOneWh,
+    getListWarehouseReceipt, createNewWarehouseReceipt, getAllSuppliers, getAllProduct, updateWarehouseReceipt, getWarehouseReceipt,
     deleteUser, fetchAllUsers, updateUser, createNewUser,
+    createNewWarehouseExport, getAllCustomer,
     fetchAllGroup,
 }

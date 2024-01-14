@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { createNewWarehouseReceipt, updateSupplier, getAllSuppliers, getAllProduct } from '../../service/dataService'
+
+import { createNewWarehouseExport, updateSupplier, getAllCustomer, getAllProduct } from '../../service/dataService'
 import { toast } from 'react-toastify';
 import _ from "lodash";
 //not merge state
-const ModalDetailImport = (props) => {
+const ModalExport = (props) => {
     const { action, dataModalUpdate } = props;
 
-    const defaultReceiptData = {
+    const defaultExportData = {
         code: '',
-        supplierId: '',
+        customerId: '',
         note: '',
         createWarehouseImportDetailDto: [{
             productId: '',
@@ -20,18 +21,15 @@ const ModalDetailImport = (props) => {
     }
     const validInputDefault = {
         code: true,
-        supplierId: true,
-
+        customerId: true,
         createWarehouseImportDetailDto: [{
             productId: true,
             quantity: true,
             price: true
         }]
-
-
     }
 
-    const [receiptData, setReceiptData] = useState(defaultReceiptData);
+    const [exportData, setExportData] = useState(defaultExportData);
     const [validInputs, setValidInputs] = useState(validInputDefault);
 
     const [supplierData, setSupplierData] = useState([]);
@@ -41,20 +39,31 @@ const ModalDetailImport = (props) => {
         fetchAllProduct();
     }, [])
     useEffect(() => {
-        if (action === 'UPDATE') {
-            setReceiptData({ ...dataModalUpdate });
+        if (action === 'UPDATE' && dataModalUpdate && dataModalUpdate.detailImport) {
+            console.log("update", dataModalUpdate)
+            setExportData({
+                ...dataModalUpdate,
+                customerId: dataModalUpdate.customerId,
+                createWarehouseImportDetailDto: dataModalUpdate.detailImport.map(detail => ({
+                    productId: detail.id, // Cần cập nhật với giá trị thích hợp từ dữ liệu sản phẩm
+                    quantity: detail.quantity,
+                    price: detail.price
+                }))
+
+
+            });
         }
     }, [dataModalUpdate])
     useEffect(() => {
         if (action === 'CREATE') {
 
-            setReceiptData({ ...receiptData });
+            setExportData({ ...exportData });
 
         }
     }, [action])
 
     const fetchSuppliers = async () => {
-        let response = await getAllSuppliers();
+        let response = await getAllCustomer();
         if (response && response.data) {
             setSupplierData(response.data.data)
         }
@@ -66,33 +75,15 @@ const ModalDetailImport = (props) => {
             setProductData(response.data.data)
         }
     }
-    // check product
-    // const checkProductInputs = () => {
-    //     if (action === 'UPDATE') return true;
-    //     setValidProductInputs(validProductInputDefault);
-    //     let arr = [];
-    //     let check = true;
-    //     for (let i = 0; i < arr.length; i++) {
-    //         if (!receiptData[arr[i]]) {
-    //             let _validInputs = _.cloneDeep(validProductInputDefault);
-    //             _validInputs[arr[i]] = false;
-    //             setValidProductInputs(_validInputs)
-    //             toast.error(`Empty input ${arr[i]} `);
-    //             check = false;
-    //             break;
-    //         }
-    //     }
-    //     return check;
-    // }
 
     //check 
     const checkValidateInputs = () => {
         if (action === 'UPDATE') return true;
         setValidInputs(validInputDefault);
-        let arr = ['code', 'supplierId'];
+        let arr = ['code', 'customerId'];
         let check = true;
         for (let i = 0; i < arr.length; i++) {
-            if (!receiptData[arr[i]]) {
+            if (!exportData[arr[i]]) {
                 let _validInputs = _.cloneDeep(validInputDefault);
                 _validInputs[arr[i]] = false;
                 setValidInputs(_validInputs)
@@ -106,34 +97,36 @@ const ModalDetailImport = (props) => {
     // Hàm xử lý khi thay đổi giá trị trong form
     const handleChangeform = (e) => {
         const { name, value } = e.target;
-        setReceiptData(prevData => ({
+        setExportData(prevData => ({
             ...prevData,
             [name]: value,
         }));
-        console.log("check", receiptData)
     };
 
 
     // Hàm xử lý khi thay đổi giá trị của chi tiết nhập kho
     const handleDetailChange = (index, e) => {
         const { name, value } = e.target;
-        setReceiptData(prevData => ({
-            ...prevData,
-            createWarehouseImportDetailDto: prevData.createWarehouseImportDetailDto.map((detail, i) =>
-                i === index ? { ...detail, [name]: value } : detail
-            )
-        }));
+        if (!isNaN(value) && Number(value) >= 0) {
+
+            setExportData(prevData => ({
+                ...prevData,
+                createWarehouseImportDetailDto: prevData.createWarehouseImportDetailDto.map((detail, i) =>
+                    i === index ? { ...detail, [name]: value } : detail
+                )
+            }));
+        }
     };
-    const hadleConfirmReceipt = async () => {
+    const hadleConfirmExport = async () => {
         let check = checkValidateInputs();
         if (check === true) {
 
             let response = action === 'CREATE' ?
-                await createNewWarehouseReceipt({ ...receiptData }) : await updateSupplier({ ...receiptData });
-            // await createNewWarehouseReceipt({ ...receiptData })
+                await createNewWarehouseExport({ ...exportData }) : await updateSupplier({ ...exportData });
+            // await createNewWarehouseExport({ ...exportData })
             if (response.data) {
                 props.onHide();
-                setReceiptData({ ...defaultReceiptData });
+                setExportData({ ...defaultExportData });
                 toast.success(action, "successful")
             } else {
                 toast.error(response.message);
@@ -143,14 +136,17 @@ const ModalDetailImport = (props) => {
             }
         }
     }
-    const handleCloseModalReceipt = () => {
+    const handleCloseModalExport = () => {
         props.onHide();
-        setReceiptData(defaultReceiptData)
+        setExportData((prevData) => ({
+            ...defaultExportData,
+            createWarehouseImportDetailDto: prevData.createWarehouseImportDetailDto || []
+        }));
         setValidInputs(validInputDefault);
     }
     // Hàm xử lý khi thêm chi tiết nhập kho
     const addDetail = () => {
-        setReceiptData(prevData => ({
+        setExportData(prevData => ({
             ...prevData,
             createWarehouseImportDetailDto: [
                 ...prevData.createWarehouseImportDetailDto,
@@ -162,13 +158,20 @@ const ModalDetailImport = (props) => {
             ]
         }));
     };
+    const handleDelete = (index) => {
+        // const deleteProduct = []
+        // deleteProduct.splice(index)
+        setExportData(prevData => ({
+            ...prevData,
+            createWarehouseImportDetailDto: prevData.createWarehouseImportDetailDto.filter((detail, i) => i !== index)
+        }));
+    }
     return (
         <>
             <Modal size="lg" show={props.show} className='modal'>
-                <Modal.Header closeButton onHide={() => handleCloseModalReceipt()} >
-
+                <Modal.Header closeButton onHide={() => handleCloseModalExport()} >
                     <Modal.Title id="contained-modal-title-vencenter">
-                        <span>{props.action === 'CREATE' ? 'Tạo mới hóa đơn nhập kho' : 'Chỉnh sửa hóa đơn nhập kho'}</span>
+                        <span>{props.action === 'CREATE' ? 'Tạo mới hóa đơn xuất kho' : 'Chỉnh sửa hóa đơn xuất kho'}</span>
                     </Modal.Title>
 
                 </Modal.Header>
@@ -176,52 +179,50 @@ const ModalDetailImport = (props) => {
                     <div className='content-body row'>
                         <div className='col-12 col-sm-6 form-group' >
                             <label>Mã hóa đơn(<span className='red'>*</span>) :</label>
-                            <input
+                            <input disabled={action === 'CREATE' ? false : true}
                                 className={validInputs.code ? 'form-control' : 'form-control is-invalid'} type="text"
-                                name="code" value={receiptData.code} onChange={handleChangeform}
+                                name="code" value={exportData.code} onChange={handleChangeform}
                             />
                         </div>
                         <div className='col-12 col-sm-6 form-group' >
-                            <label>Nhà cung cấp (<span className='red'>*</span>) :</label>
-                            <select className={validInputs.supplierId ? 'form-select' : 'form-select is-invalid'}
-                                name="supplierId" onChange={handleChangeform}
-                                value={receiptData.supplierId}
+                            <label>Khách hàng(<span className='red'>*</span>) :</label>
+                            <select disabled={action === 'CREATE' ? false : true} className={validInputs.customerId ? 'form-select' : 'form-select is-invalid'}
+                                name="customerId" onChange={handleChangeform}
+                                value={exportData.customerId}
                             >
-                                <option selected>Chọn</option>
+                                <option selected >Chọn</option>
                                 {supplierData.length > 0 &&
                                     supplierData.map((item, index) => {
                                         return (
-                                            <option key={`group-${index}`} value={item.id}>{item.fullName}</option>
+                                            <option key={`supplierData-${index}`} value={item.id}>{item.fullName}</option>
                                         )
 
                                     })
                                 }
                             </select>
+
                         </div>
 
 
                         <div className='col-12 col-sm-12 form-group' >
                             <label>Ghi chú :</label>
                             <input
-                                className={'form-control'} type="text" value={receiptData.note}
+                                className={'form-control'} type="text" value={exportData.note}
                                 name="note" onChange={handleChangeform}
                             />
                         </div>
                         <div className='col-12 col-sm-12 form-group '  >
                             <label><h6>Danh sách sản phẩm :</h6></label>
                         </div>
-                        {receiptData.createWarehouseImportDetailDto.map((detail, index) => (
+                        {exportData.createWarehouseImportDetailDto && exportData.createWarehouseImportDetailDto.map((detail, index) => (
                             <div key={index}>
                                 <div className='d-flex'>
                                     <div className='col-4 col-sm-4 form-group' >
                                         <label>Tên thuốc(<span className='red'>*</span>) :</label>
-                                        {/* <input
-                                            className={'form-control'} type="text"
-                                            id={`productId${index}`} name="productId" value={detail.productId} onChange={(e) => handleDetailChange(index, e)}
-                                        /> */}
                                         <select className={'form-select'} id={`productId${index}`}
                                             name="productId" value={detail.productId}
                                             onChange={(e) => handleDetailChange(index, e)}
+
                                         >
                                             <option selected>Chọn</option>
                                             {productData.length > 0 &&
@@ -229,29 +230,44 @@ const ModalDetailImport = (props) => {
                                                     return (
                                                         <option key={`group-${index}`} value={item.id}>{item.name}</option>
                                                     )
-
                                                 })
                                             }
                                         </select>
                                     </div>
-                                    <div className='col-4 col-sm-4 form-group' >
+                                    <div className='col-4 col-sm-3 form-group' >
                                         <label>Số lượng(<span className='red'>*</span>) :</label>
                                         <input
                                             className={'form-control'} type="number"
-                                            id={`quantity${index}`} name="quantity" value={detail.quantity} onChange={(e) => handleDetailChange(index, e)}
+                                            id={`quantity${index}`} name="quantity" value={detail.quantity} onChange={(e) => handleDetailChange(index, e)} min={0}
                                         />
                                     </div>
                                     <div className='col-4 col-sm-4 form-group' >
-                                        <label>Giá nhập(<span className='red'>*</span>) :</label>
+                                        <label>Giá bán(<span className='red'>*</span>) :</label>
                                         <input
                                             className={'form-control'} type="number"
-                                            id={`price${index}`} name="price" value={detail.price} onChange={(e) => handleDetailChange(index, e)}
+                                            id={`price${index}`} name="price" value={detail.price} onChange={(e) => handleDetailChange(index, e)} min={0}
                                         />
                                     </div>
+                                    <div className='form-group'>
+                                        <button style={{
+                                            backgroundColor: '#aaa',
+                                            marginTop: '33px',
+                                            border: 'none',
+                                            padding: '5px 20px',
+                                            cursor: 'pointer',
+                                            borderRadius: '5px',
+                                            height: '35px'
+                                        }}
+                                            onClick={() => handleDelete(index)}>x</button>
+                                    </div>
                                 </div>
+
                             </div>
                         ))}
-                        <button className="btn btn-primary col-2 col-sm-2 form-group ml-3" onClick={() => addDetail()}
+                        <button className="btn btn-primary col-2 col-sm-2 form-group" onClick={() => addDetail()}
+                            style={{
+                                marginLeft: '30px'
+                            }}
                         >
                             <i className='fa fa-plus-circle'></i> Add
                         </button>
@@ -259,8 +275,10 @@ const ModalDetailImport = (props) => {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => handleCloseModalReceipt()}>Close</Button>
-                   
+                    <Button variant="secondary" onClick={() => handleCloseModalExport()}>Close</Button>
+                    <Button variant="primary" onClick={() => hadleConfirmExport()}>
+                        {action === 'CREATE' ? 'Create' : 'Update'}
+                    </Button>
                 </Modal.Footer>
 
 
@@ -269,4 +287,4 @@ const ModalDetailImport = (props) => {
     )
 }
 
-export default ModalDetailImport;
+export default ModalExport;

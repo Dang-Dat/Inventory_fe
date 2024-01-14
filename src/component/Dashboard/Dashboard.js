@@ -71,7 +71,7 @@ const Dashboard = (props) => {
                         </a>
 
                         <a className="nav-link" href="/">
-                            <i class="fa-sharp fa-solid fa-house"></i>
+                            <i className="fa-sharp fa-solid fa-house"></i>
                             Dashboard
                         </a>
                     </li>
@@ -124,7 +124,7 @@ const Dashboard = (props) => {
 
                     <li className="nav-item">
                         <NavLink className="nav-link collapsed" to="/category" onClick={() => handleShowCategory()} >
-                            <i class="fa-solid fa-layer-group"></i>
+                            <i className="fa-solid fa-layer-group"></i>
                             Loại thuốc
                         </NavLink>
 
@@ -142,6 +142,12 @@ const Dashboard = (props) => {
                         <NavLink className="nav-link collapsed" to="/receipt"  >
                             <i className="fa-solid fa-clipboard"></i>
                             Nhập kho
+                        </NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink className="nav-link collapsed" to="/export"  >
+                            <i className="fa-solid fa-clipboard"></i>
+                            Xuất kho
                         </NavLink>
                     </li>
 

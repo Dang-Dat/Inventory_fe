@@ -8,11 +8,6 @@ import _ from "lodash";
 const ModalCustomer = (props) => {
     const { action, dataModalUpdate } = props;
 
-    const [fullName, setFullName] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [address, setAddress] = useState("");
-    const [note, setNote] = useState("");
     const defaultCustomerData = {
         fullName: '',
         email: '',
@@ -99,7 +94,6 @@ const ModalCustomer = (props) => {
             setValidInputs({ ...validInputDefault, phone: false });
             return false
         }
-
         return true
     }
 
@@ -169,7 +163,6 @@ const ModalCustomer = (props) => {
                                 onChange={(event) => handleOnchangeInput(event.target.value, "note")}
                             />
                         </div>
-
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -178,8 +171,6 @@ const ModalCustomer = (props) => {
                         {action === 'CREATE' ? 'Create' : 'Update'}
                     </Button>
                 </Modal.Footer>
-
-
             </Modal >
         </>
     )

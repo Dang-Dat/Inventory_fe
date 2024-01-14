@@ -3,12 +3,10 @@ import { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
-import ModalReceipt from './ModalReceipt';
+import ModalExport from './ModalExport';
 import _ from "lodash";
 import { getListWarehouseReceipt, deleteSupplier, getWarehouseReceipt } from '../../service/dataService'
-import ModalDetail from './ModalDetailImport';
-import ModalDeleteWarehouseReceipt from './ModalDelete'
-const Receipt = (props) => {
+const Export = (props) => {
     const location = useLocation();
     const [pageNumber, setpageNumber] = useState(1);
     const [pageSize, setPageSize] = useState(2); // so phan tu trong 1 page
@@ -16,65 +14,57 @@ const Receipt = (props) => {
     const [keyWord, setKeyWord] = useState("");
 
     useEffect(() => {
-        fetchReceipt();
+        fetchExport();
     }, [keyWord])
     useEffect(() => {
-        fetchReceipt();
+        fetchExport();
     }, [pageNumber])
 
-
-    const [listReceipt, setListReceipt] = useState([]);
-    const fetchReceipt = async () => {
+    const [listExport, setListExport] = useState([]);
+    const fetchExport = async () => {
         let response = await getListWarehouseReceipt(keyWord, pageNumber, pageSize);
         if (response && response.data) {
             // setTotalPages(response.data.data.totalPageNumber);
-            setListReceipt(response.data.data.list)
+            setListExport(response.data.data.list)
         }
     }
-    //modal update/create / Detail
-    const [isShowModalImport, setIsShowModalReceipt] = useState(false);
-    const [actionModalImport, setActionModalReceipt] = useState('');
+    //modal update/create user
+    const [isShowModalExport, setIsShowModalExport] = useState(false);
+    const [actionModalExport, setActionModalExport] = useState('');
     const [dataModalUpdate, setDataModalUpdate] = useState({});
-
-    const [isShowModalDetail, setIsShowModalDetail] = useState(false);
-    const [dataModalDetail, setDataModalDetail] = useState({})
-
-
 
     //modal delete
     const [isShowModalDelete, setIsShowModalDelete] = useState(false);
     const [dataModalDelete, setDataModalDelete] = useState({});// delete
-
     const handleClose = () => {
         setIsShowModalDelete(false);
         setDataModalDelete({});
-        setIsShowModalDetail({})
     }
 
-    const confirmDeleteReceipt = async () => {
+    const onHideModalExport = async () => {
+        setIsShowModalExport(false);
+        setDataModalUpdate({});
+        await fetchExport();
+    }
+    const confirmDeleteExport = async () => {
         let response = await deleteSupplier(dataModalDelete);
         if (response) {
             toast.success(response.data.message)
-            await fetchReceipt();
+            await fetchExport();
         } else {
             toast.error("LOI")
         }
         setIsShowModalDelete(false);
     }
-    const hanldeDeleteReceipt = (code) => {
+    const hanldeDeleteExport = (code) => {
         setDataModalDelete(code);
         setIsShowModalDelete(true);
     }
-    const onHideModalReceipt = async () => {
-        setIsShowModalReceipt(false);
-        setDataModalUpdate({});
-        await fetchReceipt();
-    }
-    const hanldeUpdateReceipt = async (receipt) => {
-        let response = await getWarehouseReceipt(receipt);
+    const hanldeUpdateExport = async (dataExport) => {
+        let response = await getWarehouseReceipt(dataExport);
 
-        setActionModalReceipt('UPDATE')
-        setIsShowModalReceipt(true);
+        setActionModalExport('UPDATE')
+        setIsShowModalExport(true);
         setDataModalUpdate(response.data.data);
     }
     const handlePageClick = async (event) => {
@@ -89,16 +79,6 @@ const Receipt = (props) => {
         // setKeyWord(value);
     }
 
-    const onHideModalDetailReceipt = async () => {
-        setIsShowModalDetail(false);
-        setDataModalDetail({});
-        await fetchReceipt();
-    }
-    const handleDetailReceipt = async (receipt) => {
-        let response = await getWarehouseReceipt(receipt);
-        setIsShowModalDetail(true);
-        setDataModalDetail(response.data.data);
-    }
     return (
         <>
             <div className="" id="content">
@@ -106,13 +86,14 @@ const Receipt = (props) => {
                     <div className="manage-users-container">
                         <div className="user-head">
                             <div className="title mt-3">
-                                <h3>Nhập kho</h3>
+                                <h3>Xuất kho</h3>
                             </div>
                             <div className="actions">
+
                                 <button className="btn btn-primary"
-                                    onClick={() => { setIsShowModalReceipt(true); setActionModalReceipt("CREATE") }}
+                                    onClick={() => { setIsShowModalExport(true); setActionModalExport("CREATE") }}
                                 >
-                                    <i className='fa fa-plus-circle'></i> Thêm mới</button>
+                                    <i className='fa fa-plus-circle'></i>Thêm mới</button>
                                 <form
                                     className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search search-for  ">
                                     <div className="input-group" style={{ marginLeft: "900px" }}>
@@ -132,37 +113,36 @@ const Receipt = (props) => {
 
                         </div>
                         <div className="user-body">
+
                             <table className="table table-borderred table-hover">
                                 <thead>
                                     <tr>
                                         <th style={{ width: '4%' }} scope="col">STT</th>
                                         <th style={{ width: '20%' }} scope="col">Mã hóa đơn</th>
-                                        <th style={{ width: '20%' }} scope="col">Nhà cung cấp</th>
+                                        <th style={{ width: '20%' }} scope="col">Khách hàng</th>
                                         <th style={{ width: '30%' }} scope="col">Ghi chú</th>
                                         <th style={{ width: '16%' }}>Actions</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {listReceipt && listReceipt.length > 0 ?
+                                    {listExport && listExport.length > 0 ?
                                         <>
-                                            {listReceipt.map((item, index) => {
+                                            {listExport.map((item, index) => {
                                                 return (
                                                     <tr key={`row-${index}`}>
                                                         <td>{(pageNumber - 1) * pageSize + index + 1}</td>
                                                         <td>{item.code}</td>
                                                         <td>{item.supplierName}</td>
                                                         <td>{item.note}</td>
-
                                                         <td>
                                                             <button className="btn btn-info "
-                                                                onClick={() => handleDetailReceipt(item)}
                                                             ><i className="fa-solid fa-eye"></i></button>
                                                             <button className="btn btn-warning mx-2"
-                                                                onClick={() => hanldeUpdateReceipt(item)}
+                                                                onClick={() => hanldeUpdateExport(item)}
                                                             ><i className="fa-regular fa-pen-to-square"></i></button>
                                                             <button className="btn btn-danger"
-                                                                onClick={() => hanldeDeleteReceipt(item)}
+                                                                onClick={() => hanldeDeleteExport(item)}
                                                             ><i className="fa fa-trash" ></i></button>
                                                         </td>
 
@@ -205,24 +185,18 @@ const Receipt = (props) => {
                         }
                     </div>
                 </div>
-                <ModalDeleteWarehouseReceipt
+                {/* <ModalDeleteReceipt
                     show={isShowModalDelete}
                     handleClose={handleClose}
-                    confirmDeleteReceipt={confirmDeleteReceipt}
+                    confirmDeleteExport={confirmDeleteExport}
                     dataModal={dataModalDelete}
                 />
-
-                <ModalDetail
+*/}
+                <ModalExport
                     handleClose={handleClose}
-                    show={isShowModalDetail}
-                    onHide={onHideModalDetailReceipt}
-                    dataModalDetail={dataModalDetail}
-                />
-                <ModalReceipt
-                    handleClose={handleClose}
-                    show={isShowModalImport}
-                    onHide={onHideModalReceipt}
-                    action={actionModalImport}
+                    show={isShowModalExport}
+                    onHide={onHideModalExport}
+                    action={actionModalExport}
                     dataModalUpdate={dataModalUpdate}
                 />
             </div>
@@ -230,4 +204,4 @@ const Receipt = (props) => {
     )
 }
 
-export default Receipt
+export default Export
