@@ -143,7 +143,7 @@ const Product = (props) => {
                                             {listProduct.map((item, index) => {
                                                 return (
                                                     <tr key={`row-${index}`}>
-                                                        <td>{(currentPage - 1) * currentLimit + index + 1}</td>
+                                                        <td>{(pageNumber - 1) * pageSize + index + 1}</td>
                                                         {/* <td>{item.id}</td> */}
                                                         <td>{item.name}</td>
                                                         <td>{item.quantity}</td>
