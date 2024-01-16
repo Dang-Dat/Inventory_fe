@@ -55,7 +55,7 @@ const ModalReceipt = (props) => {
     }, [dataModalUpdate])
     useEffect(() => {
         if (action === 'CREATE') {
-            setReceiptData(...receiptData);
+            setReceiptData(defaultReceiptData);
         }
     }, [action])
 
