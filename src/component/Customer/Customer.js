@@ -135,8 +135,8 @@ const Customer = (props) => {
                                             {listCustomers.map((item, index) => {
                                                 return (
                                                     <tr key={`row-${index}`}>
-                                                        {/* <td>{(pageNumber - 1) * pageSize + index + 1}</td> */}
-                                                        <td>{item.id}</td>
+                                                        <td>{(pageNumber - 1) * pageSize + index + 1}</td>
+                                                        {/* <td>{item.id}</td> */}
                                                         <td>{item.fullName}</td>
                                                         <td>{item.phone}</td>
                                                         <td>{item.email}</td>
