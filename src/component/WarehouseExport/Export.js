@@ -4,8 +4,10 @@ import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
 import ModalExport from './ModalExport';
+import ModalDeleteWarehouseExport from './ModalDeleteExport';
+import ModalDetailExport from './ModalDetailExport';
 import _ from "lodash";
-import { getListWarehouseReceipt, deleteSupplier, getWarehouseReceipt } from '../../service/dataService'
+import { getListWarehouseExport, deleteWarehouseExport, getWarehouseExport } from '../../service/dataService'
 const Export = (props) => {
     const location = useLocation();
     const [pageNumber, setpageNumber] = useState(1);
@@ -22,7 +24,7 @@ const Export = (props) => {
 
     const [listExport, setListExport] = useState([]);
     const fetchExport = async () => {
-        let response = await getListWarehouseReceipt(keyWord, pageNumber, pageSize);
+        let response = await getListWarehouseExport(keyWord, pageNumber, pageSize);
         if (response && response.data) {
             // setTotalPages(response.data.data.totalPageNumber);
             setListExport(response.data.data.list)
@@ -36,6 +38,10 @@ const Export = (props) => {
     //modal delete
     const [isShowModalDelete, setIsShowModalDelete] = useState(false);
     const [dataModalDelete, setDataModalDelete] = useState({});// delete
+
+    const [isShowModalDetail, setIsShowModalDetail] = useState(false);
+    const [dataModalDetail, setDataModalDetail] = useState({})
+
     const handleClose = () => {
         setIsShowModalDelete(false);
         setDataModalDelete({});
@@ -47,7 +53,7 @@ const Export = (props) => {
         await fetchExport();
     }
     const confirmDeleteExport = async () => {
-        let response = await deleteSupplier(dataModalDelete);
+        let response = await deleteWarehouseExport(dataModalDelete);
         if (response) {
             toast.success(response.data.message)
             await fetchExport();
@@ -61,8 +67,8 @@ const Export = (props) => {
         setIsShowModalDelete(true);
     }
     const hanldeUpdateExport = async (dataExport) => {
-        let response = await getWarehouseReceipt(dataExport);
-
+        let response = await getWarehouseExport(dataExport);
+        console.log("dataUpdate", response.data.data)
         setActionModalExport('UPDATE')
         setIsShowModalExport(true);
         setDataModalUpdate(response.data.data);
@@ -78,7 +84,16 @@ const Export = (props) => {
     const handleSearch = async (value) => {
         // setKeyWord(value);
     }
-
+    const onHideModalDetailExport = async () => {
+        setIsShowModalDetail(false);
+        setDataModalDetail({});
+        await fetchExport();
+    }
+    const handleDetailReceipt = async (data) => {
+        let response = await getWarehouseExport(data);
+        setIsShowModalDetail(true);
+        setDataModalDetail(response.data.data);
+    }
     return (
         <>
             <div className="" id="content">
@@ -133,10 +148,11 @@ const Export = (props) => {
                                                     <tr key={`row-${index}`}>
                                                         <td>{(pageNumber - 1) * pageSize + index + 1}</td>
                                                         <td>{item.code}</td>
-                                                        <td>{item.supplierName}</td>
+                                                        <td>{item.customer.fullName}</td>
                                                         <td>{item.note}</td>
                                                         <td>
                                                             <button className="btn btn-info "
+                                                                onClick={() => handleDetailReceipt(item)}
                                                             ><i className="fa-solid fa-eye"></i></button>
                                                             <button className="btn btn-warning mx-2"
                                                                 onClick={() => hanldeUpdateExport(item)}
@@ -185,13 +201,18 @@ const Export = (props) => {
                         }
                     </div>
                 </div>
-                {/* <ModalDeleteReceipt
+                <ModalDeleteWarehouseExport
                     show={isShowModalDelete}
                     handleClose={handleClose}
                     confirmDeleteExport={confirmDeleteExport}
                     dataModal={dataModalDelete}
                 />
-*/}
+                <ModalDetailExport
+                    handleClose={handleClose}
+                    show={isShowModalDetail}
+                    onHide={onHideModalDetailExport}
+                    dataModalDetail={dataModalDetail}
+                />
                 <ModalExport
                     handleClose={handleClose}
                     show={isShowModalExport}

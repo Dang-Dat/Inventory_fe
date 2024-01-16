@@ -7,7 +7,7 @@ import _ from "lodash";
 //not merge state
 const ModalDetailImport = (props) => {
     const { action, dataModalDetail } = props;
-
+    const [totalPrice, setTotalPrice] = useState(0);
     const defaultReceiptData = {
         code: '',
         supplierId: '',
@@ -39,9 +39,10 @@ const ModalDetailImport = (props) => {
     useEffect(() => {
         fetchSuppliers();
         fetchAllProduct();
+
     }, [])
     useEffect(() => {
-        if ( dataModalDetail && dataModalDetail.detailImport) {
+        if (dataModalDetail && dataModalDetail.detailImport) {
             setReceiptData({
                 ...dataModalDetail,
                 supplierId: dataModalDetail.supplierId,
@@ -54,8 +55,11 @@ const ModalDetailImport = (props) => {
 
             });
         }
-    }, [dataModalDetail])
 
+    }, [dataModalDetail])
+    useEffect(() => {
+        calculateTotalPrice();
+    })
     const fetchSuppliers = async () => {
         let response = await getAllSuppliers();
         if (response && response.data) {
@@ -63,7 +67,6 @@ const ModalDetailImport = (props) => {
         }
     }
     const fetchAllProduct = async () => {
-        let res = await getAllProduct();
         let response = await getAllProduct();
         if (response && response.data) {
             setProductData(response.data.data)
@@ -114,7 +117,13 @@ const ModalDetailImport = (props) => {
         setReceiptData(defaultReceiptData)
         setValidInputs(validInputDefault);
     }
-
+    const calculateTotalPrice = () => {
+        let totalPrice = 0;
+        receiptData.createWarehouseImportDetailDto.forEach((detail) => {
+            totalPrice += detail.quantity * detail.price;
+        });
+        setTotalPrice(totalPrice.toFixed(2));
+    }
     return (
         <>
             <Modal size="lg" show={props.show} className='modal'>
@@ -166,7 +175,7 @@ const ModalDetailImport = (props) => {
                         {receiptData.createWarehouseImportDetailDto.map((detail, index) => (
                             <div key={index}>
                                 <div className='d-flex'>
-                                    <div className='col-4 col-sm-4 form-group' >
+                                    <div className='col-4 col-sm-6 form-group' >
                                         <label>Tên thuốc(<span className='red'>*</span>) :</label>
                                         {/* <input
                                             className={'form-control'} type="text"
@@ -187,14 +196,14 @@ const ModalDetailImport = (props) => {
                                             }
                                         </select>
                                     </div>
-                                    <div className='col-4 col-sm-4 form-group' >
+                                    <div className='col-4 col-sm-3 form-group' >
                                         <label>Số lượng(<span className='red'>*</span>) :</label>
                                         <input disabled={true}
                                             className={'form-control'} type="number"
                                             id={`quantity${index}`} name="quantity" value={detail.quantity} onChange={(e) => handleDetailChange(index, e)}
                                         />
                                     </div>
-                                    <div className='col-4 col-sm-4 form-group' >
+                                    <div className='col-4 col-sm-3 form-group' >
                                         <label>Giá nhập(<span className='red'>*</span>) :</label>
                                         <input disabled={true}
                                             className={'form-control'} type="number"
@@ -202,8 +211,14 @@ const ModalDetailImport = (props) => {
                                         />
                                     </div>
                                 </div>
+
                             </div>
                         ))}
+                        <div className='d-flex'>
+                            <div className='col-12 col-sm-6 form-group' >
+                                <label>Tổng giá: {totalPrice} vnd</label>
+                            </div>
+                        </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>

@@ -2,18 +2,18 @@ import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import './Receipt.css'
-import { createNewWarehouseReceipt, updateSupplier, getAllSuppliers, getAllProduct } from '../../service/dataService'
+import { createNewWarehouseReceipt, updateWarehouseReceipt, getAllSuppliers, getAllProduct } from '../../service/dataService'
 import { toast } from 'react-toastify';
 import _ from "lodash";
 //not merge state
 const ModalReceipt = (props) => {
     const { action, dataModalUpdate } = props;
-
+    const [totalPrice, setTotalPrice] = useState(0);
     const defaultReceiptData = {
         code: '',
         supplierId: '',
         note: '',
-        totalPrice: 0,
+        // totalPrice: 0,
         createWarehouseImportDetailDto: [{
             productId: '',
             quantity: '',
@@ -55,7 +55,7 @@ const ModalReceipt = (props) => {
     }, [dataModalUpdate])
     useEffect(() => {
         if (action === 'CREATE') {
-            setReceiptData(defaultReceiptData);
+            setReceiptData(...receiptData);
         }
     }, [action])
 
@@ -120,16 +120,16 @@ const ModalReceipt = (props) => {
         if (check === true) {
 
             let response = action === 'CREATE' ?
-                console.log("check data", receiptData) : await updateSupplier({ ...receiptData });
+                await createNewWarehouseReceipt({ ...receiptData }) : await updateWarehouseReceipt({ ...receiptData });
             // await createNewWarehouseReceipt({ ...receiptData })
-            if (response.data) {
+            if (response) {
                 props.onHide();
                 setReceiptData({ ...defaultReceiptData });
                 toast.success(action, "successful")
             } else {
-                toast.error(response.message);
+                toast.error("Co loi trong khi tao");
                 let _validInputs = _.cloneDeep(validInputDefault);
-                _validInputs[response.data.content] = false;
+                _validInputs[response] = false;
                 setValidInputs(_validInputs)
             }
         }
@@ -171,10 +171,7 @@ const ModalReceipt = (props) => {
         receiptData.createWarehouseImportDetailDto.forEach((detail) => {
             totalPrice += detail.quantity * detail.price;
         });
-        setReceiptData((prevData) => ({
-            ...prevData,
-            totalPrice: totalPrice.toFixed(2), // Làm tròn tổng giá đến 2 chữ số thập phân
-        }));
+        setTotalPrice(totalPrice.toFixed(2));
     }
     return (
         <>
@@ -285,7 +282,7 @@ const ModalReceipt = (props) => {
                                 </button>
                             </div>
                             <div className='col-12 col-sm-6 form-group' >
-                                <label>Tổng giá: {receiptData.totalPrice}</label>
+                                <label>Tổng giá: {totalPrice} vnd</label>
                             </div>
                         </div>
                     </div>

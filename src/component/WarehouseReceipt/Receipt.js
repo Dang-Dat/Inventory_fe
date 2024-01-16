@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
 import ModalReceipt from './ModalReceipt';
 import _ from "lodash";
-import { getListWarehouseReceipt, deleteSupplier, getWarehouseReceipt } from '../../service/dataService'
+import { getListWarehouseReceipt, deleteWarehouseReceipt, getWarehouseReceipt } from '../../service/dataService'
 import ModalDetail from './ModalDetailImport';
 import ModalDeleteWarehouseReceipt from './ModalDelete'
 const Receipt = (props) => {
@@ -48,11 +48,11 @@ const Receipt = (props) => {
     const handleClose = () => {
         setIsShowModalDelete(false);
         setDataModalDelete({});
-        setIsShowModalDetail({})
+        setIsShowModalDetail(false)
     }
 
     const confirmDeleteReceipt = async () => {
-        let response = await deleteSupplier(dataModalDelete);
+        let response = await deleteWarehouseReceipt(dataModalDelete);
         if (response) {
             toast.success(response.data.message)
             await fetchReceipt();

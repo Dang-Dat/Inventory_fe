@@ -69,8 +69,7 @@ const getListWarehouseReceipt = (keyWord, page, size) => {
     return axios.get(`http://localhost:8080/warehouse-import`)
 }
 const createNewWarehouseReceipt = (receiptData) => {
-    console.log(receiptData)
-    // return axios.post('http://localhost:8080/warehouse-import', { ...receiptData })
+    return axios.post('http://localhost:8080/warehouse-import', { ...receiptData })
 }
 const getAllSuppliers = () => {
     return axios.get('http://localhost:8080/suppliers/get-all')
@@ -84,14 +83,28 @@ const updateWarehouseReceipt = (receiptData) => {
 const getWarehouseReceipt = (receiptData) => {
     return axios.get(`http://localhost:8080/warehouse-import/${receiptData.idWarehouseImport}`)
 }
+const deleteWarehouseReceipt = (receiptData) => {
 
+    return axios.delete(`http://localhost:8080/warehouse-import/${receiptData.idWarehouseImport}`)
+}
 //Export
 const createNewWarehouseExport = (exportData) => {
+    console.log("create", exportData)
     return axios.post('http://localhost:8080/warehouse-export', { ...exportData })
 }
 const getListWarehouseExport = () => {
-    return axios.get(`http://localhost:8080/warehouse-`)
+    return axios.get(`http://localhost:8080/warehouse-export`)
 }
+const deleteWarehouseExport = (exportData) => {
+    return axios.delete(`http://localhost:8080/warehouse-export/${exportData.idWarehouseExport}`)
+}
+const updateWarehouseExport = (exportData) => {
+    return axios.put(`http://localhost:8080/warehouse-export/${exportData.idWarehouseExport}`, { ...exportData })
+}
+const getWarehouseExport = (exportData) => {
+    return axios.get(`http://localhost:8080/warehouse-export/${exportData.idWarehouseExport}`)
+}
+
 const getAllCustomer = () => {
     return axios.get(`http://localhost:8080/customers/get-all`)
 }
@@ -120,8 +133,8 @@ export {
     getListCustomers, createNewCustomer, updateCustomer, deleteCustomer,
     getListSuppliers, createNewSupplier, updateSupplier, deleteSupplier,
     getListProduct, createNewProduct, updateProduct, getAllCategory, deleteProduct, getProductByID,
-    getListWarehouseReceipt, createNewWarehouseReceipt, getAllSuppliers, getAllProduct, updateWarehouseReceipt, getWarehouseReceipt,
+    getListWarehouseReceipt, createNewWarehouseReceipt, getAllSuppliers, getAllProduct, updateWarehouseReceipt, getWarehouseReceipt, deleteWarehouseReceipt,
     deleteUser, fetchAllUsers, updateUser, createNewUser,
-    createNewWarehouseExport, getAllCustomer,
+    createNewWarehouseExport, getAllCustomer, getListWarehouseExport, deleteWarehouseExport, updateWarehouseExport, getWarehouseExport,
     fetchAllGroup,
 }

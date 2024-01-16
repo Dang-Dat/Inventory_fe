@@ -2,18 +2,18 @@ import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-import { createNewWarehouseExport, updateSupplier, getAllCustomer, getAllProduct } from '../../service/dataService'
+import { createNewWarehouseExport, updateWarehouseExport, getAllCustomer, getAllProduct } from '../../service/dataService'
 import { toast } from 'react-toastify';
 import _ from "lodash";
 //not merge state
 const ModalExport = (props) => {
     const { action, dataModalUpdate } = props;
-
+    const [totalPrice, setTotalPrice] = useState(0);
     const defaultExportData = {
         code: '',
         customerId: '',
         note: '',
-        createWarehouseImportDetailDto: [{
+        createWarehouseExportDetailDtos: [{
             productId: '',
             quantity: '',
             price: ''
@@ -22,7 +22,7 @@ const ModalExport = (props) => {
     const validInputDefault = {
         code: true,
         customerId: true,
-        createWarehouseImportDetailDto: [{
+        createWarehouseExportDetailDtos: [{
             productId: true,
             quantity: true,
             price: true
@@ -32,22 +32,22 @@ const ModalExport = (props) => {
     const [exportData, setExportData] = useState(defaultExportData);
     const [validInputs, setValidInputs] = useState(validInputDefault);
 
-    const [supplierData, setSupplierData] = useState([]);
+    const [customerData, setCustomerData] = useState([]);
     const [productData, setProductData] = useState([]);
     useEffect(() => {
-        fetchSuppliers();
+        fetchCustomer();
         fetchAllProduct();
-    }, [])
+        calculateTotalPrice();
+    }, [exportData.createWarehouseExportDetailDtos])
     useEffect(() => {
-        if (action === 'UPDATE' && dataModalUpdate && dataModalUpdate.detailImport) {
-            console.log("update", dataModalUpdate)
+        if (action === 'UPDATE' && dataModalUpdate && dataModalUpdate.detailExport) {
             setExportData({
                 ...dataModalUpdate,
                 customerId: dataModalUpdate.customerId,
-                createWarehouseImportDetailDto: dataModalUpdate.detailImport.map(detail => ({
-                    productId: detail.id, // Cần cập nhật với giá trị thích hợp từ dữ liệu sản phẩm
-                    quantity: detail.quantity,
-                    price: detail.price
+                createWarehouseExportDetailDtos: dataModalUpdate.detailExport.map(detailExport => ({
+                    productId: detailExport.id, // Cần cập nhật với giá trị thích hợp từ dữ liệu sản phẩm
+                    quantity: detailExport.quantity,
+                    price: detailExport.price
                 }))
 
 
@@ -56,20 +56,18 @@ const ModalExport = (props) => {
     }, [dataModalUpdate])
     useEffect(() => {
         if (action === 'CREATE') {
-
             setExportData({ ...exportData });
-
         }
     }, [action])
 
-    const fetchSuppliers = async () => {
+    const fetchCustomer = async () => {
         let response = await getAllCustomer();
         if (response && response.data) {
-            setSupplierData(response.data.data)
+            setCustomerData(response.data.data)
         }
     }
     const fetchAllProduct = async () => {
-        let res = await getAllProduct();
+
         let response = await getAllProduct();
         if (response && response.data) {
             setProductData(response.data.data)
@@ -111,18 +109,19 @@ const ModalExport = (props) => {
 
             setExportData(prevData => ({
                 ...prevData,
-                createWarehouseImportDetailDto: prevData.createWarehouseImportDetailDto.map((detail, i) =>
-                    i === index ? { ...detail, [name]: value } : detail
+                createWarehouseExportDetailDtos: prevData.createWarehouseExportDetailDtos.map((detailExport, i) =>
+                    i === index ? { ...detailExport, [name]: value } : detailExport
                 )
             }));
         }
+        calculateTotalPrice();
     };
     const hadleConfirmExport = async () => {
         let check = checkValidateInputs();
         if (check === true) {
 
             let response = action === 'CREATE' ?
-                await createNewWarehouseExport({ ...exportData }) : await updateSupplier({ ...exportData });
+                await createNewWarehouseExport({ ...exportData }) : await updateWarehouseExport({ ...exportData });
             // await createNewWarehouseExport({ ...exportData })
             if (response.data) {
                 props.onHide();
@@ -140,7 +139,7 @@ const ModalExport = (props) => {
         props.onHide();
         setExportData((prevData) => ({
             ...defaultExportData,
-            createWarehouseImportDetailDto: prevData.createWarehouseImportDetailDto || []
+            // createWarehouseExportDetailDtos: prevData.createWarehouseExportDetailDtos || []
         }));
         setValidInputs(validInputDefault);
     }
@@ -148,8 +147,8 @@ const ModalExport = (props) => {
     const addDetail = () => {
         setExportData(prevData => ({
             ...prevData,
-            createWarehouseImportDetailDto: [
-                ...prevData.createWarehouseImportDetailDto,
+            createWarehouseExportDetailDtos: [
+                ...prevData.createWarehouseExportDetailDtos,
                 {
                     productId: '',
                     quantity: '',
@@ -163,8 +162,15 @@ const ModalExport = (props) => {
         // deleteProduct.splice(index)
         setExportData(prevData => ({
             ...prevData,
-            createWarehouseImportDetailDto: prevData.createWarehouseImportDetailDto.filter((detail, i) => i !== index)
+            createWarehouseExportDetailDtos: prevData.createWarehouseExportDetailDtos.filter((detailExport, i) => i !== index)
         }));
+    }
+    const calculateTotalPrice = () => {
+        let totalPrice = 0;
+        exportData.createWarehouseExportDetailDtos.forEach((detailExport) => {
+            totalPrice += detailExport.quantity * detailExport.price;
+        });
+        setTotalPrice(totalPrice.toFixed(2));
     }
     return (
         <>
@@ -191,10 +197,10 @@ const ModalExport = (props) => {
                                 value={exportData.customerId}
                             >
                                 <option selected >Chọn</option>
-                                {supplierData.length > 0 &&
-                                    supplierData.map((item, index) => {
+                                {customerData.length > 0 &&
+                                    customerData.map((item, index) => {
                                         return (
-                                            <option key={`supplierData-${index}`} value={item.id}>{item.fullName}</option>
+                                            <option key={`customerData-${index}`} value={item.id}>{item.fullName}</option>
                                         )
 
                                     })
@@ -214,13 +220,13 @@ const ModalExport = (props) => {
                         <div className='col-12 col-sm-12 form-group '  >
                             <label><h6>Danh sách sản phẩm :</h6></label>
                         </div>
-                        {exportData.createWarehouseImportDetailDto && exportData.createWarehouseImportDetailDto.map((detail, index) => (
+                        {exportData.createWarehouseExportDetailDtos && exportData.createWarehouseExportDetailDtos.map((detailExport, index) => (
                             <div key={index}>
                                 <div className='d-flex'>
                                     <div className='col-4 col-sm-4 form-group' >
                                         <label>Tên thuốc(<span className='red'>*</span>) :</label>
                                         <select className={'form-select'} id={`productId${index}`}
-                                            name="productId" value={detail.productId}
+                                            name="productId" value={detailExport.productId}
                                             onChange={(e) => handleDetailChange(index, e)}
 
                                         >
@@ -238,14 +244,14 @@ const ModalExport = (props) => {
                                         <label>Số lượng(<span className='red'>*</span>) :</label>
                                         <input
                                             className={'form-control'} type="number"
-                                            id={`quantity${index}`} name="quantity" value={detail.quantity} onChange={(e) => handleDetailChange(index, e)} min={0}
+                                            id={`quantity${index}`} name="quantity" value={detailExport.quantity} onChange={(e) => handleDetailChange(index, e)} min={0}
                                         />
                                     </div>
                                     <div className='col-4 col-sm-4 form-group' >
                                         <label>Giá bán(<span className='red'>*</span>) :</label>
                                         <input
                                             className={'form-control'} type="number"
-                                            id={`price${index}`} name="price" value={detail.price} onChange={(e) => handleDetailChange(index, e)} min={0}
+                                            id={`price${index}`} name="price" value={detailExport.price} onChange={(e) => handleDetailChange(index, e)} min={0}
                                         />
                                     </div>
                                     <div className='form-group'>
@@ -264,14 +270,17 @@ const ModalExport = (props) => {
 
                             </div>
                         ))}
-                        <button className="btn btn-primary col-2 col-sm-2 form-group" onClick={() => addDetail()}
-                            style={{
-                                marginLeft: '30px'
-                            }}
-                        >
-                            <i className='fa fa-plus-circle'></i> Add
-                        </button>
-
+                        <div className='d-flex'>
+                            <div className='col-12 col-sm-6 form-group  '>
+                                <button className="btn btn-primary  form-group ml-3" onClick={() => addDetail()}
+                                >
+                                    <i className='fa fa-plus-circle'></i> Add
+                                </button>
+                            </div>
+                            <div className='col-12 col-sm-6 form-group' >
+                                <label>Tổng giá: {totalPrice}</label>
+                            </div>
+                        </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
