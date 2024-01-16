@@ -89,7 +89,6 @@ const deleteWarehouseReceipt = (receiptData) => {
 }
 //Export
 const createNewWarehouseExport = (exportData) => {
-    console.log("create", exportData)
     return axios.post('http://localhost:8080/warehouse-export', { ...exportData })
 }
 const getListWarehouseExport = () => {
@@ -99,6 +98,7 @@ const deleteWarehouseExport = (exportData) => {
     return axios.delete(`http://localhost:8080/warehouse-export/${exportData.idWarehouseExport}`)
 }
 const updateWarehouseExport = (exportData) => {
+    console.log("exportData", exportData)
     return axios.put(`http://localhost:8080/warehouse-export/${exportData.idWarehouseExport}`, { ...exportData })
 }
 const getWarehouseExport = (exportData) => {

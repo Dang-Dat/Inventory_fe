@@ -65,6 +65,7 @@ const ModalDetailImport = (props) => {
         if (response && response.data) {
             setSupplierData(response.data.data)
         }
+
     }
     const fetchAllProduct = async () => {
         let response = await getAllProduct();

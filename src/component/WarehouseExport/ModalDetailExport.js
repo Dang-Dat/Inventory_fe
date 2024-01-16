@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { createNewWarehouseReceipt, updateSupplier, getAllSuppliers, getAllProduct, } from '../../service/dataService'
+import { createNewWarehouseReceipt, updateSupplier, getAllCustomer, getAllProduct, } from '../../service/dataService'
 import { toast } from 'react-toastify';
 import _ from "lodash";
 //not merge state
@@ -10,7 +10,7 @@ const ModalDetailExport = (props) => {
     const [totalPrice, setTotalPrice] = useState(0);
     const defaultExportData = {
         code: '',
-        supplierId: '',
+        customerId: '',
         note: '',
         createWarehouseExportDetailDtos: [{
             productId: '',
@@ -20,7 +20,7 @@ const ModalDetailExport = (props) => {
     }
     const validInputDefault = {
         code: true,
-        supplierId: true,
+        customerId: true,
 
         createWarehouseExportDetailDtos: [{
             productId: true,
@@ -39,14 +39,13 @@ const ModalDetailExport = (props) => {
     useEffect(() => {
         fetchCustomer();
         fetchAllProduct();
-
     }, [])
     useEffect(() => {
         if (dataModalDetail && dataModalDetail.detailExport) {
 
             setExportData({
                 ...dataModalDetail,
-                supplierId: dataModalDetail.supplierId,
+                customerId: dataModalDetail.customerId,
                 createWarehouseExportDetailDtos: dataModalDetail.detailExport.map(detail => ({
                     productId: detail.id, // Cần cập nhật với giá trị thích hợp từ dữ liệu sản phẩm
                     quantity: detail.quantity,
@@ -59,7 +58,7 @@ const ModalDetailExport = (props) => {
         calculateTotalPrice();
     })
     const fetchCustomer = async () => {
-        let response = await getAllSuppliers();
+        let response = await getAllCustomer();
         if (response && response.data) {
             setCustomerData(response.data.data)
         }
@@ -68,6 +67,7 @@ const ModalDetailExport = (props) => {
         let response = await getAllProduct();
         if (response && response.data) {
             setProductData(response.data.data)
+
         }
     }
 
@@ -79,7 +79,6 @@ const ModalDetailExport = (props) => {
             ...prevData,
             [name]: value,
         }));
-        console.log("check", exportData)
     };
 
 
@@ -126,10 +125,10 @@ const ModalDetailExport = (props) => {
                             />
                         </div>
                         <div className='col-12 col-sm-6 form-group' >
-                            <label>Nhà cung cấp (<span className='red'>*</span>) :</label>
-                            <select disabled={true} className={validInputs.supplierId ? 'form-select' : 'form-select is-invalid'}
-                                name="supplierId" onChange={handleChangeform}
-                                value={exportData.supplierId}
+                            <label>Khách hàng (<span className='red'>*</span>) :</label>
+                            <select disabled={true} className={validInputs.customer ? 'form-select' : 'form-select is-invalid'}
+                                name="customerId" onChange={handleChangeform}
+                                value={exportData.customerId}
                             >
                                 <option selected>Chọn</option>
                                 {customerData.length > 0 &&
@@ -186,7 +185,7 @@ const ModalDetailExport = (props) => {
                                         />
                                     </div>
                                     <div className='col-4 col-sm-3 form-group' >
-                                        <label>Giá nhập(<span className='red'>*</span>) :</label>
+                                        <label>Giá xuất(<span className='red'>*</span>) :</label>
                                         <input disabled={true}
                                             className={'form-control'} type="number"
                                             id={`price${index}`} name="price" value={detail.price} onChange={(e) => handleDetailChange(index, e)}

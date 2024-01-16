@@ -39,6 +39,7 @@ const ModalExport = (props) => {
         fetchAllProduct();
         calculateTotalPrice();
     }, [exportData.createWarehouseExportDetailDtos])
+
     useEffect(() => {
         if (action === 'UPDATE' && dataModalUpdate && dataModalUpdate.detailExport) {
             setExportData({
@@ -63,7 +64,7 @@ const ModalExport = (props) => {
     const fetchCustomer = async () => {
         let response = await getAllCustomer();
         if (response && response.data) {
-            setCustomerData(response.data.data)
+            setCustomerData(response.data)
         }
     }
     const fetchAllProduct = async () => {
