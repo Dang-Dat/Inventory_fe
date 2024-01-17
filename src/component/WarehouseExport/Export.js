@@ -68,7 +68,6 @@ const Export = (props) => {
     }
     const hanldeUpdateExport = async (dataExport) => {
         let response = await getWarehouseExport(dataExport);
-        console.log("dataUpdate", response.data.data)
         setActionModalExport('UPDATE')
         setIsShowModalExport(true);
         setDataModalUpdate(response.data.data);

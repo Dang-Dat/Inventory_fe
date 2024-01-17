@@ -45,7 +45,7 @@ const ModalDetailExport = (props) => {
 
             setExportData({
                 ...dataModalDetail,
-                customerId: dataModalDetail.customerId,
+                customerId: dataModalDetail.customer,
                 createWarehouseExportDetailDtos: dataModalDetail.detailExport.map(detail => ({
                     productId: detail.id, // Cần cập nhật với giá trị thích hợp từ dữ liệu sản phẩm
                     quantity: detail.quantity,
@@ -126,9 +126,9 @@ const ModalDetailExport = (props) => {
                         </div>
                         <div className='col-12 col-sm-6 form-group' >
                             <label>Khách hàng (<span className='red'>*</span>) :</label>
-                            <select disabled={true} className={validInputs.customer ? 'form-select' : 'form-select is-invalid'}
+                            <select disabled={true} className={'form-select'}
                                 name="customerId" onChange={handleChangeform}
-                                value={exportData.customerId}
+                                value={exportData.customerId.id}
                             >
                                 <option selected>Chọn</option>
                                 {customerData.length > 0 &&

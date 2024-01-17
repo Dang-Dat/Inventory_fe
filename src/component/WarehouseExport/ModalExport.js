@@ -44,16 +44,25 @@ const ModalExport = (props) => {
         if (action === 'UPDATE' && dataModalUpdate && dataModalUpdate.detailExport) {
             setExportData({
                 ...dataModalUpdate,
-                customerId: dataModalUpdate.customerId,
+                customerId: dataModalUpdate.customer,
+                // customer: dataModalUpdate.customer{
+                //     address: customer.address,
+                //     email: customer.email,
+                //     fullName: customer.fullName,
+                //     id: customer.id,
+                //     note: customer.note,
+                //     phone: customer.phone,
+                // },
                 createWarehouseExportDetailDtos: dataModalUpdate.detailExport.map(detailExport => ({
                     productId: detailExport.id, // Cần cập nhật với giá trị thích hợp từ dữ liệu sản phẩm
                     quantity: detailExport.quantity,
                     price: detailExport.price
                 }))
-
-
             });
+
+
         }
+
     }, [dataModalUpdate])
     useEffect(() => {
         if (action === 'CREATE') {
@@ -64,8 +73,9 @@ const ModalExport = (props) => {
     const fetchCustomer = async () => {
         let response = await getAllCustomer();
         if (response && response.data) {
-            setCustomerData(response.data)
+            setCustomerData(response.data.data)
         }
+        console.log("id:", customerData)
     }
     const fetchAllProduct = async () => {
 
@@ -79,7 +89,7 @@ const ModalExport = (props) => {
     const checkValidateInputs = () => {
         if (action === 'UPDATE') return true;
         setValidInputs(validInputDefault);
-        let arr = ['code', 'customerId'];
+        let arr = ['code', 'customer'];
         let check = true;
         for (let i = 0; i < arr.length; i++) {
             if (!exportData[arr[i]]) {
@@ -195,9 +205,10 @@ const ModalExport = (props) => {
                             <label>Khách hàng(<span className='red'>*</span>) :</label>
                             <select disabled={action === 'CREATE' ? false : true} className={validInputs.customerId ? 'form-select' : 'form-select is-invalid'}
                                 name="customerId" onChange={handleChangeform}
-                                value={exportData.customerId}
+                                value={exportData.customerId.id}
+                                defaultValue={'DEFAULT'}
                             >
-                                <option selected >Chọn</option>
+                                <option value="DEFAULT" disabled >Chọn</option>
                                 {customerData.length > 0 &&
                                     customerData.map((item, index) => {
                                         return (
@@ -229,9 +240,9 @@ const ModalExport = (props) => {
                                         <select className={'form-select'} id={`productId${index}`}
                                             name="productId" value={detailExport.productId}
                                             onChange={(e) => handleDetailChange(index, e)}
-
+                                            defaultValue={'DEFAULT'}
                                         >
-                                            <option selected>Chọn</option>
+                                            <option value="DEFAULT" disabled>Chọn</option>
                                             {productData.length > 0 &&
                                                 productData.map((item, index) => {
                                                     return (
