@@ -89,6 +89,7 @@ const deleteWarehouseReceipt = (receiptData) => {
 }
 //Export
 const createNewWarehouseExport = (exportData) => {
+    console.log("id:", exportData)
     return axios.post('http://localhost:8080/warehouse-export', { ...exportData })
 }
 const getListWarehouseExport = () => {

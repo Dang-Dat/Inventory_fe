@@ -75,7 +75,7 @@ const ModalExport = (props) => {
         if (response && response.data) {
             setCustomerData(response.data.data)
         }
-        console.log("id:", customerData)
+
     }
     const fetchAllProduct = async () => {
 
@@ -89,7 +89,7 @@ const ModalExport = (props) => {
     const checkValidateInputs = () => {
         if (action === 'UPDATE') return true;
         setValidInputs(validInputDefault);
-        let arr = ['code', 'customer'];
+        let arr = ['code', 'customerId'];
         let check = true;
         for (let i = 0; i < arr.length; i++) {
             if (!exportData[arr[i]]) {
@@ -208,7 +208,7 @@ const ModalExport = (props) => {
                                 value={exportData.customerId.id}
                                 defaultValue={'DEFAULT'}
                             >
-                                <option value="DEFAULT" disabled >Chọn</option>
+                                <option value="DEFAULT"  >Chọn</option>
                                 {customerData.length > 0 &&
                                     customerData.map((item, index) => {
                                         return (
@@ -242,7 +242,7 @@ const ModalExport = (props) => {
                                             onChange={(e) => handleDetailChange(index, e)}
                                             defaultValue={'DEFAULT'}
                                         >
-                                            <option value="DEFAULT" disabled>Chọn</option>
+                                            <option value="DEFAULT" >Chọn</option>
                                             {productData.length > 0 &&
                                                 productData.map((item, index) => {
                                                     return (
